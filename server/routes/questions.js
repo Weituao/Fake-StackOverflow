@@ -337,7 +337,7 @@ router.put('/editQuestion/:question', async (req, res) => {
 
   const tagIds = await Promise.all(tags.map(async (tag) => {
     const tagExists = await Tags.findOne({ name: tag }).exec();
-    if (!tagExists && user.reputation < 50) {
+    if (!tagExists && Users.reputation < 50) {
       res.send({ error: true, message: 'User must have at least 50 reputation points to create a new tag.' });
       return null;
     }

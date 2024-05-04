@@ -1,190 +1,168 @@
+import React, { useState, useEffect } from 'react';
 import parseContent from '../utils/parseContent';
 import generateDate from '../utils/generateDate';
 import CommentContainer from './CommentContainer';
 import axios from 'axios';
-import { useState, useEffect } from 'react';
 
 function AnswerContainers({ question_id, updatePage, userSession, username, userid }) {
   const [answerListObj, setAnswerListObj] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [deleteAnswer, setDeleteAnswer] = useState({ answer_id: '', delete: false });
   const answersPerPage = 5;
   const indexOfLastAnswer = currentPage * answersPerPage;
   const indexOfFirstAnswer = indexOfLastAnswer - answersPerPage;
-  let currentanswers = answerListObj.slice(indexOfFirstAnswer, indexOfLastAnswer);
+  const currentanswers = answerListObj.slice(indexOfFirstAnswer, indexOfLastAnswer);
   const totalPages = Math.ceil(answerListObj.length / answersPerPage);
-
-  useEffect(() => {
-    axios.get(`http://localhost:8000/posts/answers/${question_id}`).then(async (res) => {
+  
+  useEffect(function() {
+    axios.get(`http://localhost:8000/posts/answers/${question_id}`).then(async function(res) {
       const answers = res.data;
-      const promises = answers.map(async (answer) => {
+      const promises = answers.map(async function(answer) {
         const res = await axios.get(`http://localhost:8000/users/getUsername/${answer.ans_by}`);
         answer.username = res.data;
         return answer;
       });
       let results = await Promise.all(promises);
-      if (username) {
-        let matchingElements = results.filter((element) => element.ans_by === userid);
-        let nonMatchingElements = results.filter((element) => element.ans_by !== userid);
-        results = matchingElements.concat(nonMatchingElements);
-      }
-      setAnswerListObj([...results]);
+      const filteredResults = results.filter(function(element) {
+        return username ? (element.ans_by === userid ? true : false) : true;
+      });
+      setAnswerListObj([...filteredResults]);
     });
   }, [question_id, username, userid]);
+  
+  
 
   function handleNextClick() {
-    setCurrentPage((currentPage) => {
-      if (currentPage === totalPages) {
-        return 1;
-      } else {
-        return currentPage + 1;
-      }
-    });
+    setCurrentPage(currentPage => currentPage === totalPages ? 1 : currentPage + 1);
   }
+  
 
   function handleBackClick() {
-    setCurrentPage((currentPage) => currentPage - 1);
+    setCurrentPage(currentPage => currentPage === 1 ? currentPage : currentPage - 1);
   }
+  
 
-  function sleep(ms) {
-    return new Promise((resolve) => setTimeout(resolve, ms));
-  }
+  const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
 
   async function upVoteButtonClicked(answer) {
-    if (userSession.reputation && userSession.reputation >= 50) {
-      let userAlreadyVoted = answer.voters.filter((voter) => voter.userVoted === userSession.userId);
-      if (userAlreadyVoted && userAlreadyVoted.direction !== 1) {
-        await axios.patch(`http://localhost:8000/posts/answers/incrementVotes/${answer._id}/${userSession.userId}`);
-        updatePage(() => 'loading');
-        await sleep(10);
-        updatePage({ currentPage: 'question-answer', qid: question_id });
-      }
-    }
+    userSession.reputation && userSession.reputation >= 50 && await Promise.all(answer.voters
+      .filter(voter => voter.userVoted === userSession.userId && voter.direction !== 1)
+      .map(voter => axios.patch(`http://localhost:8000/posts/answers/incrementVotes/${answer._id}/${userSession.userId}`))
+    );
+  
+    updatePage(() => 'loading');
+    setTimeout(() => {
+      updatePage({ currentPage: 'question-answer', qid: question_id });
+    }, 10);
   }
-
+  
   async function downVoteButtonClicked(answer) {
-    if (userSession.reputation && userSession.reputation >= 50) {
-      let userAlreadyVoted = answer.voters.filter((voter) => voter.userVoted === userSession.userId);
-      if (userAlreadyVoted && userAlreadyVoted.direction !== -1) {
-        await axios.patch(`http://localhost:8000/posts/answers/decrementVotes/${answer._id}/${userSession.userId}`);
-        updatePage(() => 'loading');
-        await sleep(10);
-        updatePage({ currentPage: 'question-answer', qid: question_id });
-      }
-    }
+    userSession.reputation && userSession.reputation >= 50 &&
+      answer.voters.some(voter => voter.userVoted === userSession.userId && voter.direction !== -1) &&
+      axios.patch(`http://localhost:8000/posts/answers/decrementVotes/${answer._id}/${userSession.userId}`)
+        .then(() => {
+          updatePage(() => 'loading');
+          setTimeout(() => {
+            updatePage({ currentPage: 'question-answer', qid: question_id });
+          }, 10);
+        });
   }
-
+  
   function renderPagination() {
     return (
-      <div className="pagination">
-        <button className="pagination-button" disabled={currentPage === 1} onClick={handleBackClick}>
-          Back
-        </button>
-        <button className="pagination-button" disabled={totalPages <= 1} onClick={handleNextClick}>
-          Next
-        </button>
-      </div>
+      React.createElement('div', { className: 'pagination' },
+        React.createElement('button', { className: 'pagination-button', disabled: currentPage === 1, onClick: handleBackClick }, 'Back'),
+        React.createElement('button', { className: 'pagination-button', disabled: totalPages <= 1, onClick: handleNextClick }, 'Next')
+      )
     );
   }
 
-  const [deleteAnswer, setDeleteAnswer] = useState({ answer_id: '', delete: false });
+  function renderDeleteAndEditButton(element) {
+    return element.ans_by === userid ? (
+      React.createElement('div', { className: 'delete-edit-button-container' },
+        React.createElement('button', {
+          className: 'delete-button',
+          onClick: function() { setDeleteAnswer({ answer_id: element._id, delete: true }); }
+        }, 'Delete'),
+        React.createElement('button', {
+          className: 'edit-button',
+          onClick: function() {
+            updatePage({
+              currentPage: 'reply-to-question-user',
+              qid: question_id,
+              aid: element._id,
+              userid: userid,
+              username: username,
+              text: element.text
+            });
+          }
+        }, 'Edit')
+      )
+    ) : null;
+  }
+  
 
-  const answerList = currentanswers.map((element) => {
-    function renderDeleteAndEditButton() {
-      if (element.ans_by === userid) {
-        return (
-          <div className="delete-edit-button-container">
-            <button
-              className="delete-button"
-              onClick={() => {
-                setDeleteAnswer({ answer_id: element._id, delete: true });
-              }}
-            >
-              Delete
-            </button>
-            <button
-              className="edit-button"
-              onClick={() => {
-                updatePage({
-                  currentPage: 'reply-to-question-user',
-                  qid: question_id,
-                  aid: element._id,
-                  userid: userid,
-                  username: username,
-                  text: element.text,
-                });
-              }}
-            >
-              Edit
-            </button>
-          </div>
-        );
-      }
-    }
-
-    function createDeleteWarn() {
-      return (
-        <div className="delete-warning-container">
-          <h3>Are you sure you want to delete this answer?</h3>
-          <button onClick={handleDelete}>Yes</button>
-          <button onClick={handleCancel}>No</button>
-        </div>
-      );
-    }
-
-    async function handleDelete() {
-      axios.delete(`http://localhost:8000/posts/answers/deleteAnswer/${deleteAnswer.answer_id}`);
-      updatePage(() => 'loading');
-      await sleep(10);
-      updatePage({ currentPage: 'question-answer-user', qid: question_id, userid: userid, username: username });
-    }
-
-    function handleCancel() {
-      setDeleteAnswer({ answer_id: '', delete: false });
-    }
-
-    let timeNow = new Date();
+  function createDeleteWarn() {
     return (
-      <div key={element._id} className="answer-container">
-        <div className="vote-container">
-          <button
-            disabled={!userSession.loggedIn || userSession.reputation < 50 || userSession.userId === element.ans_by}
-            onClick={() => upVoteButtonClicked(element)}
-            className="upvote-button"
-          >
-            Upvote
-          </button>
-          <div className="vote-counter">{element.votes}</div>
-          <button
-            disabled={!userSession.loggedIn || userSession.reputation < 50 || userSession.userId === element.ans_by}
-            onClick={() => downVoteButtonClicked(element)}
-            className="downvote-button"
-          >
-            Downvote
-          </button>
-        </div>
-        <div className="answer-content-div">
-          <p>{parseContent(element.text)}</p>
-        </div>
-        <div className="answer-metadata-div">
-          {renderDeleteAndEditButton()}
-          {element._id === deleteAnswer.answer_id ? createDeleteWarn() : null}
-          <h4 id={element.ans_by}>{element.username}&nbsp;</h4>
-          <h5>asked {generateDate(element.ans_date_time, timeNow)} </h5>
-        </div>
-        <hr></hr>
-        <CommentContainer
-          question_id={question_id}
-          answer_id={element._id}
-          updatePage={updatePage}
-          userSession={userSession}
-        />
-      </div>
+      React.createElement('div', { className: 'delete-warning-container' },
+        React.createElement('h3', null, 'Are you sure you want to delete this answer?'),
+        React.createElement('button', { onClick: handleDelete }, 'Yes'),
+        React.createElement('button', { onClick: handleCancel }, 'No')
+      )
+    );
+  }
+
+  async function handleDelete() {
+    axios.delete(`http://localhost:8000/posts/answers/deleteAnswer/${deleteAnswer.answer_id}`);
+    updatePage(function() { return 'loading'; });
+    await sleep(10);
+    updatePage({ currentPage: 'question-answer-user', qid: question_id, userid: userid, username: username });
+  }
+
+  function handleCancel() {
+    setDeleteAnswer({ answer_id: '', delete: false });
+  }
+
+  let timeNow = new Date();
+  const answerList = currentanswers.map(function(element) {
+    return (
+      React.createElement('div', { key: element._id, className: 'answer-container' },
+        React.createElement('div', { className: 'vote-container' },
+          React.createElement('button', {
+            disabled: !userSession.loggedIn || userSession.reputation < 50 || userSession.userId === element.ans_by,
+            onClick: function() { upVoteButtonClicked(element); },
+            className: 'upvote-button'
+          }, 'Upvote'),
+          React.createElement('div', { className: 'vote-counter' }, element.votes),
+          React.createElement('button', {
+            disabled: !userSession.loggedIn || userSession.reputation < 50 || userSession.userId === element.ans_by,
+            onClick: function() { downVoteButtonClicked(element); },
+            className: 'downvote-button'
+          }, 'Downvote')
+        ),
+        React.createElement('div', { className: 'answer-content-div' },
+          React.createElement('p', null, parseContent(element.text))
+        ),
+        React.createElement('div', { className: 'answer-metadata-div' },
+          renderDeleteAndEditButton(element),
+          element._id === deleteAnswer.answer_id ? createDeleteWarn() : null,
+          React.createElement('h4', { id: element.ans_by }, element.username, ' '),
+          React.createElement('h5', null, 'asked ', generateDate(element.ans_date_time, timeNow), ' ')
+        ),
+        React.createElement('hr', null),
+        React.createElement(CommentContainer, {
+          question_id: question_id,
+          answer_id: element._id,
+          updatePage: updatePage,
+          userSession: userSession
+        })
+      )
     );
   });
+
   return (
-    <>
-      {answerList} {renderPagination()}
-    </>
+    React.createElement(React.Fragment, null, answerList, ' ', renderPagination())
   );
 }
 

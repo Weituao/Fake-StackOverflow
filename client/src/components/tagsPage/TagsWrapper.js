@@ -88,53 +88,35 @@ function TagsWrapper({ updatePage, setSearch, tags, username, userid }) {
       function deleteTagClicked() {
         setDeleteTag({ tagId: element._id, tagName: element.name, delete: true });
       }
-  
-      return React.createElement(
-        'li',
-        { key: element._id, className: 'tag-container' },
-        React.createElement(
-          'div',
-          { className: 'tag-name-div' },
-          React.createElement(
-            'h2',
-            null,
-            React.createElement(
-              'a',
-              {
-                href: element._id,
-                id: element._id,
-                onClick: function(e) {
-                  e.preventDefault();
-                  searchForTag(element.name);
-                },
-              },
-              element.name
-            )
-          )
-        ),
-        React.createElement(
-          'div',
-          { className: 'tag-num-questions-div' },
-          React.createElement(
-            'h4',
-            null,
-            tagQuestionsCount[element._id] ? tagQuestionsCount[element._id] + ' ' : 'Loading...',
+      return React.createElement('li', { key: element._id, className: 'tag-container' }, [
+        React.createElement('div', { className: 'tag-name-div' }, [
+          React.createElement('h2', null, [
+            React.createElement('a', {
+              href: element._id,
+              id: element._id,
+              onClick: (e) => {
+                e.preventDefault();
+                searchForTag(element.name);
+              }
+            }, element.name)
+          ])
+        ]),
+        React.createElement('div', { className: 'tag-num-questions-div' }, [
+          React.createElement('h4', null, [
+            tagQuestionsCount[element._id] ?? 'Loading...',
+            ' ',
             tagQuestionsCount[element._id] === 1 ? 'question' : 'questions'
-          )
-        ),
-        username
-          ? React.createElement(
-              'div',
-              null,
-              React.createElement('button', { onClick: editTagClicked }, ' Edit '),
-              React.createElement('button', { onClick: deleteTagClicked }, ' Delete ')
-            )
-          : null,
+          ])
+        ]),
+        username ? React.createElement('div', null, [
+          React.createElement('button', { onClick: editTagClicked }, 'Edit'),
+          React.createElement('button', { onClick: deleteTagClicked }, 'Delete')
+        ]) : null,
         editTag.tagId === element._id && editTag.edit ? createEditTagForm() : null,
         editTag.tagId === element._id && editTag.error ? React.createElement('p', null, editTag.errorMessage) : null,
         deleteTag.tagId === element._id && deleteTag.delete ? createDeleteWarn() : null,
         deleteTag.tagId === element._id && deleteTag.error ? React.createElement('p', null, deleteTag.errorMessage) : null
-      );
+      ]);
     })
   );
 }

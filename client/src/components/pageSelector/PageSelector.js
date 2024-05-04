@@ -7,13 +7,13 @@ function NavBar({ currentPage, welcomePage, sessionActive, updateSession }) {
   const [selectedNav, setSelectedNav] = useState(currentPage || 'none');
   const [currentSearch, setSearch] = useState({ tagSearch: false, search: '' });
 
-  const updateSelectedNav = (navValue) => {
+  function updateSelectedNav(navValue) {
     setSelectedNav(navValue);
-  };
+  }
 
-  const updateSearch = (searchValue) => {
+  function updateSearch(searchValue) {
     setSearch(searchValue);
-  };
+  }
 
   function navQuestionClick() {
     setSelectedNav('questions');
@@ -31,52 +31,50 @@ function NavBar({ currentPage, welcomePage, sessionActive, updateSession }) {
   }
 
   return (
-    <div>
-      <Header
-        setSearch={updateSearch}
-        updatePage={updateSelectedNav}
-        updateSession={updateSession}
-        currentSession={sessionActive}
-        welcomePage={welcomePage}
-      />
-      <div id="nav-main-div">
-        <div id="nav" className={'nav'}>
-          <button
-            id="nav-questions"
-            onClick={navQuestionClick}
-            className={'nav-button'}
-            style={{
-              backgroundColor: selectedNav === 'questions' ? 'lightgray' : 'whitesmoke',
-            }}
-          >
-            Questions
-          </button>
-          <button
-            id="nav-tags"
-            onClick={navTagsClick}
-            className={'nav-button'}
-            style={{ backgroundColor: selectedNav === 'tags' ? 'lightgray' : 'whitesmoke' }}
-          >
-            Tags
-          </button>
-          <button
-            id="nav-tags"
-            onClick={navUserClick}
-            className={'nav-button'}
-            style={{ backgroundColor: selectedNav === 'user' ? 'lightgray' : 'whitesmoke' }}
-          >
-            User
-          </button>
-        </div>
-        <MainPage
-          currentPage={selectedNav}
-          updatePage={updateSelectedNav}
-          setSearch={updateSearch}
-          currentSearch={currentSearch}
-          currentSession={sessionActive}
-        />
-      </div>
-    </div>
+    React.createElement('div', null,
+      React.createElement(Header, {
+        setSearch: updateSearch,
+        updatePage: updateSelectedNav,
+        updateSession: updateSession,
+        currentSession: sessionActive,
+        welcomePage: welcomePage
+      }),
+      React.createElement('div', { id: 'nav-main-div' },
+        React.createElement('div', { id: 'nav', className: 'nav' },
+          React.createElement('button', {
+            id: 'nav-questions',
+            onClick: navQuestionClick,
+            className: 'nav-button',
+            style: {
+              backgroundColor: selectedNav === 'questions' ? 'lightgray' : 'whitesmoke'
+            }
+          }, 'Questions'),
+          React.createElement('button', {
+            id: 'nav-tags',
+            onClick: navTagsClick,
+            className: 'nav-button',
+            style: {
+              backgroundColor: selectedNav === 'tags' ? 'lightgray' : 'whitesmoke'
+            }
+          }, 'Tags'),
+          React.createElement('button', {
+            id: 'nav-tags',
+            onClick: navUserClick,
+            className: 'nav-button',
+            style: {
+              backgroundColor: selectedNav === 'user' ? 'lightgray' : 'whitesmoke'
+            }
+          }, 'User')
+        ),
+        React.createElement(MainPage, {
+          currentPage: selectedNav,
+          updatePage: updateSelectedNav,
+          setSearch: updateSearch,
+          currentSearch: currentSearch,
+          currentSession: sessionActive
+        })
+      )
+    )
   );
 }
 

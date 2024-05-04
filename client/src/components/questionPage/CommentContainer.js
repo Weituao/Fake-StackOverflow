@@ -77,7 +77,7 @@ function CommentContainer({ question_id, updatePage, userSession }) {
 
   const [commentText, setCommentText] = useState('');
   const [commentError, setCommentError] = useState('');
-
+  
   async function addCommentToQuestion(commentText) {
     const commentType = 'question';
     const toId = question_id;
@@ -89,53 +89,66 @@ function CommentContainer({ question_id, updatePage, userSession }) {
       toId: toId,
     };
     const res = await axios.post('http://localhost:8000/posts/comments/addComment', newComment);
-    if (res.data === 'success') {
-      setCommentText('');
-      setCommentError('');
-      updatePage(function() {
-        return 'loading';
-      });
-      await sleep(10);
-      updatePage(function() {
-        return 'questions';
-      });
-    }
-    if (res.data === 'User reputation too low') {
-      setCommentError('You cannot make a comment because your reputation is lower than 50');
-    }
-    if (res.data === 'Comment must be between 1 and 140 characters') {
-      setCommentError('Comment must be between 1 and 140 characters');
+    
+    switch (res.data) {
+      case 'success':
+        setCommentText('');
+        setCommentError('');
+        updatePage(() => 'loading');
+        await sleep(10);
+        updatePage(() => 'questions');
+        break;
+      case 'User reputation too low':
+        setCommentError('You cannot make a comment because your reputation is lower than 50');
+        break;
+      case 'Comment must be between 1 and 140 characters':
+        setCommentError('Comment must be between 1 and 140 characters');
+        break;
+      default:
+        // Handle any other cases here
+        break;
     }
   }
+  
 
   function renderNewCommentInput() {
-    if (!userSession.loggedIn) return null;
-
-    function handleCommentTextChange(event) {
-      setCommentText(event.target.value);
+    let component = null;
+    
+    switch (userSession.loggedIn) {
+      case true:
+        const handleCommentTextChange = (event) => {
+          setCommentText(event.target.value);
+        };
+    
+        const handleAddCommentClick = () => {
+          addCommentToQuestion(commentText);
+        };
+    
+        component = React.createElement(
+          'div',
+          { className: 'new-comment-input' },
+          React.createElement('textarea', {
+            className: 'new-comment-textarea',
+            placeholder: 'Add a comment',
+            value: commentText,
+            onChange: handleCommentTextChange,
+          }),
+          React.createElement(
+            'button',
+            { className: 'new-comment-button', onClick: handleAddCommentClick },
+            'Add Comment'
+          ),
+          React.createElement('div', { className: 'comment-error' }, commentError)
+        );
+        break;
+      default:
+        component = null;
+        break;
     }
-
-    function handleAddCommentClick() {
-      addCommentToQuestion(commentText);
-    }
-
-    return React.createElement(
-      'div',
-      { className: 'new-comment-input' },
-      React.createElement('textarea', {
-        className: 'new-comment-textarea',
-        placeholder: 'Add a comment',
-        value: commentText,
-        onChange: handleCommentTextChange,
-      }),
-      React.createElement(
-        'button',
-        { className: 'new-comment-button', onClick: handleAddCommentClick },
-        'Add Comment'
-      ),
-      React.createElement('div', { className: 'comment-error' }, commentError)
-    );
+  
+    return component;
   }
+  
 
   const commentList = currentcomments.map(function(element) {
     return React.createElement(

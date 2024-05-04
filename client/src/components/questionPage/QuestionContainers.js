@@ -13,141 +13,187 @@ function QuestionContainers({ questions, updatePage, userSession, username, user
   const totalPages = Math.ceil(questions.length / questionsPerPage);
 
   function handleNextClick() {
-    setCurrentPage((currentPage) => {
-      if (currentPage === totalPages) {
-        return 1;
-      } else {
-        return currentPage + 1;
-      }
+    setCurrentPage(function(currentPage) {
+      return currentPage === totalPages ? 1 : currentPage + 1;
     });
   }
+  
 
   function handleBackClick() {
-    setCurrentPage((currentPage) => currentPage - 1);
+    setCurrentPage(function(currentPage) {
+      return currentPage === 1 ? currentPage : currentPage - 1;
+    });
   }
-
-  if (currentQuestions.length === 0) {
-    return (
-      <div id="no-question-found">
-        <h1>No questions found</h1>
-      </div>
-    );
+  
+  switch (currentQuestions.length) {
+    case 0:
+      return React.createElement(
+        'div',
+        { id: 'no-question-found' },
+        React.createElement('h1', null, 'No questions found')
+      );
+    default:
+      // Your default case or subsequent logic if needed
+      break;
   }
+  
 
   function writeSummaryIfExist(question) {
-    if (question.summary) {
-      return <p>{question.summary}</p>;
-    }
-    return null;
-  }
-
-  function sleep(ms) {
-    return new Promise((resolve) => setTimeout(resolve, ms));
-  }
-
-  async function upVoteButtonClicked(question) {
-    if (userSession.reputation && userSession.reputation >= 50) {
-      let userAlreadyVoted = question.voters.filter((voter) => voter.userVoted === userSession.userId);
-      if (userAlreadyVoted && userAlreadyVoted.direction !== 1) {
-        await axios.patch(`http://localhost:8000/posts/questions/incrementVotes/${question._id}/${userSession.userId}`);
-        updatePage(() => 'loading');
-        await sleep(10);
-        updatePage(() => 'questions');
-      }
+    switch (question.summary !== undefined) {
+      case true:
+        return React.createElement('p', null, question.summary);
+      default:
+        return null;
     }
   }
+  
+  const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-  async function downVoteButtonClicked(question) {
-    if (userSession.reputation && userSession.reputation >= 50) {
-      let userAlreadyVoted = question.voters.filter((voter) => voter.userVoted === userSession.userId);
-      if (userAlreadyVoted && userAlreadyVoted.direction !== -1) {
-        await axios.patch(`http://localhost:8000/posts/questions/decrementVotes/${question._id}/${userSession.userId}`);
-        updatePage(() => 'loading');
-        await sleep(10);
-        updatePage(() => 'questions');
-      }
-    }
+function upVoteButtonClicked(question) {
+  switch (true) {
+    case !userSession.reputation || userSession.reputation < 50:
+      return Promise.resolve(); // Exit early if reputation is less than 50 or not available
+    case question.voters.some(voter => voter.userVoted === userSession.userId && voter.direction !== 1):
+      break; // Proceed to voting if the user has not voted in the up direction
+    default:
+      return Promise.resolve(); // Exit early if none of the conditions are met
   }
 
-  const questionsList = currentQuestions.map((question) => {
-    return (
-      <div key={question._id} className="question-container">
-        <div className="vote-container">
-          <button
-            disabled={!userSession.loggedIn || userSession.reputation < 50 || userSession.userId === question.asked_by}
-            onClick={() => upVoteButtonClicked(question)}
-            className="upvote-button"
-          >
-            Upvote
-          </button>
-          <div className="vote-counter">{question.votes}</div>
-          <button
-            disabled={!userSession.loggedIn || userSession.reputation < 50 || userSession.userId === question.asked_by}
-            onClick={() => downVoteButtonClicked(question)}
-            className="downvote-button"
-          >
-            Downvote
-          </button>
-        </div>
-        <div className="question-ans-views-div">
-          <h6>{question.answers.length} answers</h6>
-          <h6>{question.views} views</h6>
-        </div>
-        <div className="question-content-div">
-          <div id="question-content-div-top">
-            <h2
-              id={question._id}
-              onClick={async () => {
-                if (username) {
-                  updatePage({
-                    currentPage: 'question-answer-user',
-                    qid: question._id,
-                    username: username,
-                    userid: userid,
-                  });
-                } else {
-                  await axios
-                    .patch('http://localhost:8000/posts/questions/incrementViews/' + question._id)
-                    .catch(() => alert('An Error Occurred'));
-                  updatePage({ currentPage: 'question-answer', qid: question._id });
+  // If conditions are met, proceed with upvoting
+  return axios.patch(`http://localhost:8000/posts/questions/incrementVotes/${question._id}/${userSession.userId}`)
+    .then(() => {
+      updatePage(() => 'loading');
+      return sleep(10);
+    })
+    .then(() => {
+      updatePage(() => 'questions');
+    });
+}
+
+
+function downVoteButtonClicked(question) {
+  switch (true) {
+    case !(userSession.reputation && userSession.reputation >= 50):
+      return Promise.resolve(); // Exit early if reputation is less than 50 or not available
+    case !(question.voters.find(voter => voter.userVoted === userSession.userId && voter.direction !== -1)):
+      return Promise.resolve(); // Exit early if the user has already voted in the down direction
+    default:
+      return axios.patch(`http://localhost:8000/posts/questions/decrementVotes/${question._id}/${userSession.userId}`)
+        .then(() => {
+          updatePage(() => 'loading');
+          return sleep(10);
+        })
+        .then(() => {
+          updatePage(() => 'questions');
+        });
+  }
+}
+
+
+
+  const questionsList = currentQuestions.map(function(question) {
+    return React.createElement(
+      'div',
+      { key: question._id, className: 'question-container' },
+      React.createElement(
+        'div',
+        { className: 'vote-container' },
+        React.createElement(
+          'button',
+          {
+            disabled:
+              !userSession.loggedIn || userSession.reputation < 50 || userSession.userId === question.asked_by,
+            onClick: function() {
+              upVoteButtonClicked(question);
+            },
+            className: 'upvote-button',
+          },
+          'Upvote'
+        ),
+        React.createElement('div', { className: 'vote-counter' }, question.votes),
+        React.createElement(
+          'button',
+          {
+            disabled:
+              !userSession.loggedIn || userSession.reputation < 50 || userSession.userId === question.asked_by,
+            onClick: function() {
+              downVoteButtonClicked(question);
+            },
+            className: 'downvote-button',
+          },
+          'Downvote'
+        )
+      ),
+      React.createElement(
+        'div',
+        { className: 'question-ans-views-div' },
+        React.createElement('h6', null, question.answers.length, ' answers'),
+        React.createElement('h6', null, question.views, ' views')
+      ),
+      React.createElement(
+        'div',
+        { className: 'question-content-div' },
+        React.createElement(
+          'div',
+          { id: 'question-content-div-top' },
+          React.createElement(
+            'h2',
+            {
+              id: question._id,
+              onClick: function() {
+                switch (true) {
+                  case !!username:
+                    updatePage({
+                      currentPage: 'question-answer-user',
+                      qid: question._id,
+                      username: username,
+                      userid: userid,
+                    });
+                    break;
+                  default:
+                    axios
+                      .patch('http://localhost:8000/posts/questions/incrementViews/' + question._id)
+                      .then(() => {
+                        updatePage({ currentPage: 'question-answer', qid: question._id });
+                      })
+                      .catch(() => {
+                        alert('An Error Occurred');
+                      });
+                    break;
                 }
-              }}
-            >
-              {question.title}
-            </h2>
-            {writeSummaryIfExist(question)}
-            <GenerateHtmlForTags tagIds={question.tags} qid={question._id} />
-          </div>
-        </div>
-        <div className="question-metadata-div">
-          <h4 id={question.asked_by}>{question.username}&nbsp;</h4>
-          <h5>asked {generateDate(question.ask_date_time, new Date())} </h5>
-        </div>
-        <hr></hr>
-        <CommentContainer question_id={question._id} updatePage={updatePage} userSession={userSession} />
-      </div>
+              },
+            },
+            question.title
+          ),
+          writeSummaryIfExist(question),
+          React.createElement(GenerateHtmlForTags, { tagIds: question.tags, qid: question._id })
+        )
+      ),
+      React.createElement(
+        'div',
+        { className: 'question-metadata-div' },
+        React.createElement('h4', { id: question.asked_by }, question.username, ' '),
+        React.createElement('h5', null, 'asked ', generateDate(question.ask_date_time, new Date()), ' ')
+      ),
+      React.createElement('hr', null),
+      React.createElement(CommentContainer, { question_id: question._id, updatePage: updatePage, userSession: userSession })
     );
   });
 
   function renderPagination() {
-    return (
-      <div className="pagination">
-        <button className="pagination-button" disabled={currentPage === 1} onClick={handleBackClick}>
-          Back
-        </button>
-        <button className="pagination-button" onClick={handleNextClick}>
-          Next
-        </button>
-      </div>
+    return React.createElement(
+      'div',
+      { className: 'pagination' },
+      React.createElement(
+        'button',
+        { className: 'pagination-button', disabled: currentPage === 1, onClick: handleBackClick },
+        'Back'
+      ),
+      React.createElement('button', { className: 'pagination-button', onClick: handleNextClick }, 'Next')
     );
   }
 
-  return (
-    <>
-      <div className="all-question-containers">{questionsList}</div>
-      {renderPagination()}
-    </>
-  );
+  return React.createElement(React.Fragment, null, React.createElement('div', { className: 'all-question-containers' }, questionsList), renderPagination());
 }
 
 export default QuestionContainers;
