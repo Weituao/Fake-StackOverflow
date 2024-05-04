@@ -6,99 +6,71 @@ import PageSelector from '../pageSelector/PageSelector.js';
 import axios from 'axios';
 
 function WelcomePage() {
-  const [currentPage, setcurrentPage] = useState('welcome');
-  const [sessionActive, setSessionActive] = useState({ loggedIn: false, username: '', email: '' });
-
-  const updateSession = useCallback((data) => {
-    setSessionActive(data);
-  }, []);
+  const [testp, getthisp] = useState('welcome');
+  const [isac, getisac] = useState({ loggedIn: false, username: '', email: '' });
+  const updateSession = useCallback(function(data) {
+    getisac(data); }, []);
 
   useEffect(() => {
-    axios
-      .get('http://localhost:8000/users/session')
-      .then((res) => {
-        updateSession(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, [updateSession]);
-
-  if (currentPage === 'login') {
-    return (
-      <>
-        {sessionActive.loggedIn ? (
-          <PageSelector
-            currentPage={'questions'}
-            welcomePage={setcurrentPage}
-            sessionActive={sessionActive}
-            updateSession={updateSession}
-          />
-        ) : (
-          <LoginContainer updatePage={setcurrentPage} />
-        )}
-      </>
-    );
-  }
-  if (currentPage === 'signup') {
-    return (
-      <>
-        {sessionActive.loggedIn ? (
-          <PageSelector
-            currentPage={'questions'}
-            welcomePage={setcurrentPage}
-            sessionActive={sessionActive}
-            updateSession={updateSession}
-          />
-        ) : (
-          <SignUpContainer updatePage={setcurrentPage} />
-        )}
-      </>
-    );
-  }
-  if (currentPage === 'guest') {
-    return (
-      <div>
-        <PageSelector
-          currentPage={'questions'}
-          welcomePage={setcurrentPage}
-          sessionActive={sessionActive}
-          updateSession={updateSession}
-        />
-      </div>
-    );
-  }
-
-  function directToLoginForm() {
-    setcurrentPage('login');
-  }
-
-  function directToSignUpForm() {
-    setcurrentPage('signup');
-  }
-
-  function directAsGuest() {
-    setcurrentPage('guest');
-  }
+    const getcode = async () => {
+      try {
+        const res = await axios.get('http://localhost:8000/users/session');
+        updateSession(res.data);} catch (err) {
+        console.log(err);} };
+    getcode();}, [updateSession]);
+  
 
   return (
-    <>
-      <div className="wp-main-div"></div>
-      <div className="centered">
-        <h1 className="wp-h1">Fake Stackoverflow</h1>
-        <div className="wp-button-container">
-          <button disabled={sessionActive.loggedIn} onClick={directToSignUpForm}>
-            Sign Up | new user |{' '}
-          </button>
-          <button disabled={sessionActive.loggedIn} onClick={directToLoginForm}>
-            Log In | existing user |{' '}
-          </button>
-          <button onClick={directAsGuest}>
-            {sessionActive.loggedIn ? `Welcome back ${sessionActive.username}` : 'Continue as Guest'}
-          </button>
-        </div>
-      </div>
-    </>
+    testp === 'login' ? (
+      isac.loggedIn ? (
+        React.createElement(PageSelector, {
+          currentPage: 'questions',
+          welcomePage: getthisp,
+          sessionActive: isac,
+          updateSession: updateSession
+        })
+      ) : (
+        React.createElement(LoginContainer, { updatePage: getthisp })
+      )
+    ) : testp === 'signup' ? (
+      isac.loggedIn ? (
+        React.createElement(PageSelector, {
+          currentPage: 'questions',
+          welcomePage: getthisp,
+          sessionActive: isac,
+          updateSession: updateSession
+        })
+      ) : (
+        React.createElement(SignUpContainer, { updatePage: getthisp })
+      )
+    ) : testp === 'guest' ? (
+      React.createElement('div', null,
+        React.createElement(PageSelector, {
+          currentPage: 'questions',
+          welcomePage: getthisp,
+          sessionActive: isac,
+          updateSession: updateSession
+        })
+      )
+    ) : (
+      React.createElement(React.Fragment, null,
+        React.createElement('div', { className: 'wp-main-div' }),
+        React.createElement('div', { className: 'centered' },
+          React.createElement('h1', { className: 'wp-h1' }, 'Fake Stackoverflow'),
+          React.createElement('div', { className: 'wp-button-container' },
+            React.createElement('button', { disabled: isac.loggedIn, onClick: () => getthisp('signup') },
+              'Sign Up | new user |'
+            ),
+            React.createElement('button', { disabled: isac.loggedIn, onClick: () => getthisp('login') },
+              'Log In | existing user |'
+            ),
+            React.createElement('button', { onClick: () => getthisp('guest') },
+              isac.loggedIn ? `Welcome back ${isac.username}` : 'Continue as Guest'
+            )
+          )
+        )
+      )
+    )
   );
 }
 

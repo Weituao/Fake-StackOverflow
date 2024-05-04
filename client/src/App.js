@@ -1,14 +1,10 @@
-// ************** THIS IS YOUR APP'S ENTRY POINT. CHANGE THIS FILE AS NEEDED. **************
-// ************** DEFINE YOUR REACT COMPONENTS in ./components directory **************
-import './stylesheets/index.css';
-import FakeStackOverflow from './components/fakestackoverflow.js'
-import axios from 'axios'
+import React from 'react';
+import FakeStackOverflow from './components/fakestackoverflow.js';
+import axios from 'axios';
 
-function App() {
-  axios.defaults.withCredentials = true
-  return (
-      <FakeStackOverflow />
-  );
-}
+const App = () => {
+  axios.defaults.withCredentials = true;
+  return React.createElement(FakeStackOverflow, null);
+};
 
 export default App;

@@ -1,31 +1,39 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-async function getTagById(tagId) {
-  const baseUrl = 'http://localhost:8000/posts/tags/tag_id/';
-  const url = baseUrl + tagId;
-  const response = await axios.get(url);
-  return response.data.name;
-}
-
 function GenerateHtmlForTags({ tagIds, qid }) {
-  const [tags, setTags] = useState([]);
+  const [isthetgs, getthetags] = useState([]);
 
   useEffect(() => {
-    const fetchData = async () => {
-      const fetchedTags = await Promise.all(tagIds.map((tagId) => getTagById(tagId)));
-      setTags(fetchedTags);
+    const getthed = async () => {
+      const getthet = tagIds.map((tagId) => getTagById(tagId));
+      Promise.all(getthet)
+        .then((fetchedTags) => {
+          getthetags(fetchedTags);
+        })
+        .catch((error) => {
+          console.error('Error fetching tags:', error);
+          getthetags([]);
+        });
     };
-    fetchData();
+    getthed();
   }, [tagIds]);
 
   return (
     <ul key={qid} id="question-tags">
-      {tags.map((tag, index) => (
-        <li key={qid + tagIds[index]}>{tag}</li>
-      ))}
+      {isthetgs.length
+        ? isthetgs.map((tag, index) => <li key={qid + tagIds[index]}>{tag}</li>)
+        : <li>No tags found</li>
+      }
     </ul>
   );
+}
+
+async function getTagById(tagId) {
+  const defaulturl = 'http://localhost:8000/posts/tags/tag_id/';
+  const url = defaulturl + tagId;
+  const getanswer = await axios.get(url);
+  return getanswer.data.name;
 }
 
 export { getTagById };

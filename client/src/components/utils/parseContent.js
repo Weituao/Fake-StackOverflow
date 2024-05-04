@@ -1,25 +1,17 @@
 function parseContent(text) {
-  const regex = /\[(.*?)\]\((.*?)\)/g;
-  let startIndex = 0;
-  let endIndex = 0;
-  let matches = [];
-  let result = [];
-  let counter = 0;
+  const parser = /\[(.*?)\]\((.*?)\)/g;
+  const issame = text.split(parser);
+  let timer = 0;
 
-  while ((matches = regex.exec(text)) !== null) {
-    endIndex = matches.index;
-    result.push(
-      text.slice(startIndex, endIndex),
-      <a href={matches[2]} key={counter} target="_blank" rel="noreferrer">
-        {matches[1]}
-      </a>
-    );
-    startIndex = regex.lastIndex;
-    counter++;
-  }
+  const answers = issame.map((match, index) => 
+    index % 3 === 0 
+      ? <span key={timer++}>{match}</span>
+      : index % 3 === 1 
+        ? <a href={issame[index + 1]} key={timer} target="_blank" rel="noreferrer">{match}</a>
+        : null
+  );
 
-  result.push(text.slice(startIndex));
-  return <>{result}</>;
+  return <>{answers}</>;
 }
 
 export default parseContent;

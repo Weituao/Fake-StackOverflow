@@ -3,15 +3,15 @@ import '../../stylesheets/UsersPage.css';
 import axios from 'axios';
 
 function AdminContainer({ updatePage, currentSession }) {
-  useEffect(() => {
+  useEffect(function() {
     window.scrollTo(0, 0);
   }, []);
 
   const [usersList, setUsersList] = useState([]);
   const [showWarning, setShowWarning] = useState({ warning: false, userId: '' });
 
-  useEffect(() => {
-    axios.get(`http://localhost:8000/users/admin`).then(async (res) => {
+  useEffect(function() {
+    axios.get(`http://localhost:8000/users/admin`).then(function(res) {
       setUsersList([...res.data]);
     });
   }, []);
@@ -19,112 +19,100 @@ function AdminContainer({ updatePage, currentSession }) {
   function getTimeElapsedString(date) {
     const now = new Date();
     const diff = now.getTime() - date.getTime();
-
-    if (diff < 1000) {
-      // less than a second
-      return 'Just now';
-    } else if (diff < 60 * 1000) {
-      // less than a minute
-      const seconds = Math.floor(diff / 1000);
-      return `${seconds} second${seconds === 1 ? '' : 's'}`;
-    } else if (diff < 60 * 60 * 1000) {
-      // less than an hour
-      const minutes = Math.floor(diff / (60 * 1000));
-      return `${minutes} minute${minutes === 1 ? '' : 's'}`;
-    } else if (diff < 24 * 60 * 60 * 1000) {
-      // less than a day
-      const hours = Math.floor(diff / (60 * 60 * 1000));
-      return `${hours} hour${hours === 1 ? '' : 's'}`;
-    } else {
-      // more than a day
-      const days = Math.floor(diff / (24 * 60 * 60 * 1000));
-      return `${days} day${days === 1 ? '' : 's'}`;
-    }
+    const units = [
+      { value: 1000, label: 'second' },
+      { value: 60 * 1000, label: 'minute' },
+      { value: 60 * 60 * 1000, label: 'hour' },
+      { value: 24 * 60 * 60 * 1000, label: 'day' }
+    ];
+  
+    const elapsedUnit = units.find(unit => diff < unit.value);
+    const value = Math.floor(diff / (elapsedUnit ? elapsedUnit.value : 1));
+    const label = elapsedUnit ? elapsedUnit.label : 'day';
+    return `${value} ${label}${value === 1 ? '' : 's'}`;
   }
+  
 
   function displayUsers() {
-    if (usersList === 'error') {
-      return (
-        <h1 id="users-error-message">
-          An error occurred while fetching Users from the server. Please try again later.<br></br>
-          <br></br>
-          <div onClick={() => window.location.reload(false)}>Return to Welcome Page</div>
-        </h1>
-      );
-    } else {
-      const userList = usersList.map((user) => {
-        function handleDeleteClick() {
-          if (showWarning.warning) {
-            deleteUser();
-          } else {
-            setShowWarning({ warning: true, userId: user._id });
-          }
-        }
-        function handleCancelClick() {
-          setShowWarning({ warning: false, userId: '' });
-        }
-
-        function deleteUser() {
+    return usersList === 'error' ? (
+      React.createElement('h1', { id: 'users-error-message' }, [
+        'An error occurred while fetching Users from the server. Please try again later.',
+        React.createElement('br', null),
+        React.createElement('br', null),
+        React.createElement('div', { onClick: () => window.location.reload(false) }, 'Return to Welcome Page')
+      ])
+    ) : (
+      React.createElement(React.Fragment, null, usersList.map(function(user) {
+        const handleDeleteClick = () => showWarning.warning ? deleteUser() : setShowWarning({ warning: true, userId: user._id });
+        const handleCancelClick = () => setShowWarning({ warning: false, userId: '' });
+  
+        const deleteUser = () => {
           const userToDelete = showWarning.userId;
-          axios.delete(`http://localhost:8000/users/deleteUser/${userToDelete}`).then(async (res) => {
-            if (res.data === 'success') {
-              const updatedUsersList = usersList.filter((user) => user._id !== userToDelete);
-              setUsersList(updatedUsersList);
-              setShowWarning({ warning: false, userId: '' });
-            } else {
-              alert('An error occurred while deleting the user. Please try again later.');
-            }
-          });
-        }
-
-        return (
-          <React.Fragment key={user._id}>
-            <div className="user-container">
-              <h2
-                onClick={() => {
-                  updatePage({ currentPage: 'admin-user', userid: user._id });
-                }}
-              >
-                {user._id === currentSession.userId ? user.username + ' (My Account)' : user.username}
-              </h2>
-              <button disabled={user._id === currentSession.userId} onClick={handleDeleteClick}>
-                Delete
-              </button>
-            </div>
-            {showWarning.userId === user._id && (
-              <div className="warning">
-                <p>Are you sure you want to delete this user?</p>
-                <button onClick={deleteUser}>Delete User</button>
-                <button onClick={handleCancelClick}>Cancel</button>
-              </div>
-            )}
-            <hr></hr>
-          </React.Fragment>
-        );
-      });
-
-      return <>{userList}</>;
-    }
+          axios.delete(`http://localhost:8000/users/deleteUser/${userToDelete}`).then(res =>
+            res.data === 'success'
+              ? (
+                setUsersList(usersList.filter(user => user._id !== userToDelete)),
+                setShowWarning({ warning: false, userId: '' })
+              )
+              : alert('An error occurred while deleting the user. Please try again later.')
+          );
+        };
+  
+        return React.createElement(React.Fragment, { key: user._id }, [
+          React.createElement('div', { className: 'user-container', key: user._id + 'container' }, [
+            React.createElement('h2', {
+              key: user._id + 'username',
+              onClick: () => updatePage({ currentPage: 'admin-user', userid: user._id })
+            }, user._id === currentSession.userId ? user.username + ' (My Account)' : user.username),
+            React.createElement('button', {
+              key: user._id + 'delete',
+              disabled: user._id === currentSession.userId,
+              onClick: handleDeleteClick
+            }, 'Delete')
+          ]),
+          showWarning.userId === user._id && (
+            React.createElement('div', { className: 'warning', key: user._id + 'warning' }, [
+              React.createElement('p', { key: user._id + 'warningp' }, 'Are you sure you want to delete this user?'),
+              React.createElement('button', { key: user._id + 'deleteUser', onClick: deleteUser }, 'Delete User'),
+              React.createElement('button', { key: user._id + 'cancel', onClick: handleCancelClick }, 'Cancel')
+            ])
+          ),
+          React.createElement('hr', { key: user._id + 'hr' })
+        ]);
+      }))
+    );
   }
+  
+  
 
-  return (
-    <div>
-      <div id="upper-main">
-        <div className="user-top-container">
-          <div className="user-header">
-            <h1>Welcome back {currentSession.username}!</h1>
-          </div>
-          <div className="user-header">
-            <h2>Member for {getTimeElapsedString(new Date(currentSession.created_at))}</h2>
-          </div>
-          <div className="user-header">
-            <h3>Reputation Score: {currentSession.reputation}</h3>
-          </div>
-        </div>
-      </div>
-      <div id="lower-main">{displayUsers()}</div>
-    </div>
-  );
+  return React.createElement('div', null, [
+    usersList === 'error'
+      ? (
+        React.createElement('h1', { id: 'users-error-message' }, [
+          'An error occurred while fetching Users from the server. Please try again later.',
+          React.createElement('br', null),
+          React.createElement('br', null),
+          React.createElement('div', { onClick: () => window.location.reload(false) }, 'Return to Welcome Page')
+        ])
+      )
+      : (
+        React.createElement('div', { id: 'upper-main', key: 'upper-main' }, [
+          React.createElement('div', { className: 'user-top-container', key: 'user-top-container' }, [
+            React.createElement('div', { className: 'user-header', key: 'user-header1' }, [
+              React.createElement('h1', { key: 'welcome-header' }, 'Welcome back ' + currentSession.username + '!')
+            ]),
+            React.createElement('div', { className: 'user-header', key: 'user-header2' }, [
+              React.createElement('h2', { key: 'member-for' }, 'Member for ' + getTimeElapsedString(new Date(currentSession.created_at)))
+            ]),
+            React.createElement('div', { className: 'user-header', key: 'user-header3' }, [
+              React.createElement('h3', { key: 'reputation-score' }, 'Reputation Score: ' + currentSession.reputation)
+            ])
+          ])
+        ]),
+        React.createElement('div', { id: 'lower-main', key: 'lower-main' }, displayUsers())
+      )
+  ]);
+  
 }
 
 export default AdminContainer;

@@ -2,101 +2,83 @@ import React, { useState } from 'react';
 import '../../stylesheets/SignUpANDLogInContainer.css';
 import axios from 'axios';
 
-function SignUpContainer({ updatePage }) {
-  const [formInputs, setformInputs] = useState({ userName: '', emailAddress: '', password: '', confirmPassword: '' });
-  const [hasError, setHasError] = useState({
+function SignUpContainer({ updatePage: changep }) {
+  const [userp, useri] = useState({ userName: '', emailAddress: '', password: '', confirmPassword: '' });
+  const [iser, iseer] = useState({
     userName: null,
     emailAddress: null,
     password: null,
     confirmPassword: null,
   });
-
-  const setField = (fieldName, value) => {
-    setformInputs({ ...formInputs, [fieldName]: value.trim() });
+  
+  const getf = function(isfs, number) {
+    useri(Object.assign({}, userp, { [isfs]: number.trim() }));
   };
-
-  const isNotValidEmail = (email) => {
-    const pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return !pattern.test(email);
-  };
-
-  const validateSignUp = () => {
-    const newStateHasError = {
-      userName: formInputs.userName.length === 0 ? 'Username field can not be empty.' : null,
-      emailAddress: formInputs.emailAddress.length === 0 ? 'Email field can not be empty.' : isNotValidEmail(formInputs.emailAddress) ? 'Invalid email address provided.' : null,
-      password: formInputs.password.length === 0 ? 'Password field can not be empty.' : formInputs.emailAddress.includes(formInputs.password) || formInputs.userName.includes(formInputs.password) ? 'Password field can not contain any part of email address or username.' : null,
-      confirmPassword: formInputs.confirmPassword.length === 0 ? 'Confirm Password field can not be empty.' : formInputs.confirmPassword !== formInputs.password ? 'Input provided does not match the password above.' : null,
+  
+  function notgood(email) {
+    const issize = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return !issize.test(email);
+  }
+  
+  function validateSignUp() {
+    const itiswrong = {
+      userName: userp.userName.length === 0 ? 'Cannot have empty username' : null,
+      emailAddress: userp.emailAddress.length === 0 ? 'Cannot have empty email' : notgood(userp.emailAddress) ? 'Not valid email' : null,
+      password: userp.password.length === 0 ? 'Cannot have empty password' : userp.emailAddress.includes(userp.password) || userp.userName.includes(userp.password) ? 'Password cannot contain email or password' : null,
+      confirmPassword: userp.confirmPassword.length === 0 ? 'Cannot have empty confirmed password' : userp.confirmPassword !== userp.password ? 'Does not match with the first password' : null,
     };
-
-    setHasError(newStateHasError);
-
-    const isValid = Object.values(newStateHasError).every(error => error === null);
-
-    if (isValid) {
-      const newUser = {
-        username: formInputs.userName,
-        email: formInputs.emailAddress,
-        password: formInputs.password,
+  
+    iseer(itiswrong);
+    const good = Object.values(itiswrong).every(error => error === null);
+    good && axios
+      .post('http://localhost:8000/users/signUp', {
+        username: userp.userName,
+        email: userp.emailAddress,
+        password: userp.password,
         isAdmin: false,
-      };
+      }, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+      .then(res => {
+        iseer(prevState => ({ ...prevState, confirmPassword: res.data === 'success' ? null : res.data }));
+        res.data === 'success' && changep('login');
+      });
+  }
+  function gobackhome() {
+    changep('welcome');
+  }
+  function gotologin() {
+    changep('login');
+  }
+  
+  return React.createElement(React.Fragment, null,
+    React.createElement("div", { className: "sulg-container" },
+        React.createElement("h1", null, "Sign Up"),
+        React.createElement("div", { className: "sulg-form" },
+            React.createElement("input", { type: "text", placeholder: "Username", onChange: function (e) { return getf('userName', e.target.value); }, maxLength: "100" }),
+            React.createElement("br", null),
+            React.createElement("label", { htmlFor: "username", className: "new-f-error", id: "f-error" },
+                iser.userName ? iser.userName : ''),
+            React.createElement("input", { type: "email", placeholder: "Email Address", onChange: function (e) { return getf('emailAddress', e.target.value); } }),
+            React.createElement("br", null),
+            React.createElement("label", { htmlFor: "email", className: "new-f-error", id: "f-error" },
+                iser.emailAddress ? iser.emailAddress : ''),
+            React.createElement("input", { type: "password", placeholder: "Password", onChange: function (e) { return getf('password', e.target.value); } }),
+            React.createElement("br", null),
+            React.createElement("label", { htmlFor: "password", className: "new-f-error", id: "f-error" },
+                iser.password ? iser.password : ''),
+            React.createElement("input", { type: "password", placeholder: "Confirm Password", onChange: function (e) { return getf('confirmPassword', e.target.value); } }),
+            React.createElement("br", null),
+            React.createElement("label", { htmlFor: "confirmPassword", className: "new-f-error", id: "f-error" },
+                iser.confirmPassword ? iser.confirmPassword : ''),
+            React.createElement("button", { onClick: validateSignUp }, "Sign Up")),
 
-      axios
-        .post('http://localhost:8000/users/signUp', newUser, {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        })
-        .then((res) => {
-          setHasError(prevState => ({ ...prevState, confirmPassword: res.data === 'success' ? null : res.data }));
-          if (res.data === 'success') {
-            updatePage('login');
-          }
-        });
-    }
-  };
+        React.createElement("div", { className: "sulg-bottom-div" },
+            React.createElement("button", { onClick: gobackhome }, "Back to Welcome Page"),
+            React.createElement("button", { onClick: gotologin }, "Log In"))));
 
-  const returntoWelcomePage = () => {
-    updatePage('welcome');
-  };
-
-  const directToLoginPage = () => {
-    updatePage('login');
-  };
-
-  return (
-    <>
-      <div className="sulg-container">
-        <h1>Sign Up</h1>
-        <div className="sulg-form">
-          <input type="text" placeholder="Username" onChange={(e) => setField('userName', e.target.value)} maxLength="100" />
-          <br />
-          <label htmlFor="username" className="new-f-error" id="f-error">
-            {hasError.userName ? hasError.userName : ''}
-          </label>
-          <input type="email" placeholder="Email Address" onChange={(e) => setField('emailAddress', e.target.value)} />
-          <br />
-          <label htmlFor="email" className="new-f-error" id="f-error">
-            {hasError.emailAddress ? hasError.emailAddress : ''}
-          </label>
-          <input type="password" placeholder="Password" onChange={(e) => setField('password', e.target.value)} />
-          <br />
-          <label htmlFor="password" className="new-f-error" id="f-error">
-            {hasError.password ? hasError.password : ''}
-          </label>
-          <input type="password" placeholder="Confirm Password" onChange={(e) => setField('confirmPassword', e.target.value)} />
-          <br />
-          <label htmlFor="confirmPassword" className="new-f-error" id="f-error">
-            {hasError.confirmPassword ? hasError.confirmPassword : ''}
-          </label>
-          <button onClick={validateSignUp}>Sign Up</button>
-        </div>
-        <div className="sulg-bottom-div">
-          <button onClick={returntoWelcomePage}>Back to Welcome Page</button>
-          <button onClick={directToLoginPage}>Log In</button>
-        </div>
-      </div>
-    </>
-  );
 }
 
 export default SignUpContainer;

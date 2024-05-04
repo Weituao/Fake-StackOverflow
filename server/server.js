@@ -1,6 +1,3 @@
-// Run this script to launch the server.
-// The server should run on localhost port 8000.
-// This is where you should start writing server-side code for this application.
 const express = require('express');
 const app = express();
 const cors = require('cors');
@@ -41,12 +38,12 @@ db.on('error', (err) => console.log(`Error Connecting: ${err}`));
 db.on('connected', () => console.log('Connected to database'));
 
 process.on('SIGINT', async () => {
-  if (db) {
-    await db
-      .close()
+  await (db ?
+    db.close()
       .then(() => console.log('Server closed. Database instance disconnected'))
-      .catch((err) => console.log(err));
-  }
+      .catch((err) => console.log(err))
+    : Promise.resolve()
+  );
   process.exit(0);
 });
 
