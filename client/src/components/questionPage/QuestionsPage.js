@@ -120,7 +120,7 @@ useEffect(() => {
     return currentSession.loggedIn ? (
       React.createElement(
         'button',
-        { id: 'main-ask', onClick: function() { updatePage('ask-question'); } },
+        { id: 'top-upper-main-ask', onClick: function() { updatePage('ask-question'); } },
         'Ask Question'
       )
     ) : (

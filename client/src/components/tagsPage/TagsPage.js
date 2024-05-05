@@ -61,11 +61,11 @@ function TagsPage({ updatePage, setSearch, currentSession, userTags, username, u
 
   function askButtonSownIfLogin() {
     return currentSession.loggedIn
-      ? React.createElement(
-          'button',
-          { id: 'main-ask', onClick: () => updatePage('ask-question') },
-          'Ask Question'
-        )
+      ?      React.createElement(
+        'button',
+        { id: 'top-upper-main-ask', onClick: function() { updatePage('ask-question'); } },
+        'Ask Question'
+      )
       : null;
   }
   

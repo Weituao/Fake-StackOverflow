@@ -37,13 +37,31 @@ function CommentContainer({ question_id, answer_id, updatePage, userSession }) {
   const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 
 
-  async function upVoteButtonClicked(comment) {
-    const userAlreadyVoted = comment.voters.find(voter => voter.userVoted === userSession.userId && voter.direction !== 1);
-    userAlreadyVoted && await axios.patch(`http://localhost:8000/posts/answers/comments/incrementVotes/${comment._id}/${userSession.userId}`);
-    updatePage(() => 'loading');
-    await sleep(10);
-    updatePage({ currentPage: 'question-answer', qid: question_id });
+  function upVoteButtonClicked(comment) {
+    return new Promise((resolve, reject) => {
+      let userAlreadyVoted = comment.voters.filter((voter) => voter.userVoted === userSession.userId);
+      switch (true) {
+        case !(userAlreadyVoted && userAlreadyVoted.direction !== 1):
+          resolve();
+          break;
+        default:
+          axios
+            .patch(`http://localhost:8000/posts/answers/comments/incrementVotes/${comment._id}/${userSession.userId}`)
+            .then(() => {
+              updatePage(() => 'loading');
+              setTimeout(() => {
+                updatePage({ currentPage: 'question-answer', qid: question_id });
+                resolve();
+              }, 10);
+            })
+            .catch((error) => {
+              reject(error);
+            });
+          break;
+      }
+    });
   }
+  
   
 
   function renderPagination() {

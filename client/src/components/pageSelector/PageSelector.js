@@ -46,7 +46,7 @@ function NavBar({ currentPage, welcomePage, sessionActive, updateSession }) {
             onClick: navQuestionClick,
             className: 'nav-button',
             style: {
-              backgroundColor: selectedNav === 'questions' ? 'lightgray' : 'whitesmoke'
+              backgroundColor: selectedNav === 'questions' ? 'lightgray' : 'white'
             }
           }, 'Questions'),
           React.createElement('button', {
@@ -54,7 +54,7 @@ function NavBar({ currentPage, welcomePage, sessionActive, updateSession }) {
             onClick: navTagsClick,
             className: 'nav-button',
             style: {
-              backgroundColor: selectedNav === 'tags' ? 'lightgray' : 'whitesmoke'
+              backgroundColor: selectedNav === 'tags' ? 'lightgray' : 'white'
             }
           }, 'Tags'),
           React.createElement('button', {
@@ -62,7 +62,7 @@ function NavBar({ currentPage, welcomePage, sessionActive, updateSession }) {
             onClick: navUserClick,
             className: 'nav-button',
             style: {
-              backgroundColor: selectedNav === 'user' ? 'lightgray' : 'whitesmoke'
+              backgroundColor: selectedNav === 'user' ? 'lightgray' : 'white'
             }
           }, 'User')
         ),

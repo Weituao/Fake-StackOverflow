@@ -42,32 +42,73 @@ function AnswerContainers({ question_id, updatePage, userSession, username, user
   }
   
 
-  const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+  function sleep(ms) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+  }
 
-
-  async function upVoteButtonClicked(answer) {
-    userSession.reputation && userSession.reputation >= 50 && await Promise.all(answer.voters
-      .filter(voter => voter.userVoted === userSession.userId && voter.direction !== 1)
-      .map(voter => axios.patch(`http://localhost:8000/posts/answers/incrementVotes/${answer._id}/${userSession.userId}`))
-    );
-  
-    updatePage(() => 'loading');
-    setTimeout(() => {
-      updatePage({ currentPage: 'question-answer', qid: question_id });
-    }, 10);
+  function upVoteButtonClicked(answer) {
+    return new Promise((resolve, reject) => {
+      if (!(userSession.reputation && userSession.reputation >= 50)) {
+        resolve();
+        return;
+      }
+      let userAlreadyVoted = answer.voters.filter((voter) => voter.userVoted === userSession.userId);
+      switch (userAlreadyVoted && userAlreadyVoted.direction !== 1) {
+        case true:
+          axios
+            .patch(`http://localhost:8000/posts/answers/incrementVotes/${answer._id}/${userSession.userId}`)
+            .then(() => {
+              updatePage(() => 'loading');
+              setTimeout(() => {
+                updatePage({ currentPage: 'question-answer', qid: question_id });
+                resolve();
+              }, 10);
+            })
+            .catch((error) => {
+              reject(error);
+            });
+          break;
+        default:
+          resolve();
+          break;
+      }
+    });
   }
   
-  async function downVoteButtonClicked(answer) {
-    userSession.reputation && userSession.reputation >= 50 &&
-      answer.voters.some(voter => voter.userVoted === userSession.userId && voter.direction !== -1) &&
-      axios.patch(`http://localhost:8000/posts/answers/decrementVotes/${answer._id}/${userSession.userId}`)
-        .then(() => {
-          updatePage(() => 'loading');
-          setTimeout(() => {
-            updatePage({ currentPage: 'question-answer', qid: question_id });
-          }, 10);
-        });
+
+  function downVoteButtonClicked(answer) {
+    return new Promise((resolve, reject) => {
+      switch (true) {
+        case !(userSession.reputation && userSession.reputation >= 50):
+          resolve();
+          break;
+        default:
+          let userAlreadyVoted = answer.voters.filter((voter) => voter.userVoted === userSession.userId);
+          switch (userAlreadyVoted && userAlreadyVoted.direction !== -1) {
+            case true:
+              axios
+                .patch(`http://localhost:8000/posts/answers/decrementVotes/${answer._id}/${userSession.userId}`)
+                .then(() => {
+                  updatePage(() => 'loading');
+                  setTimeout(() => {
+                    updatePage({ currentPage: 'question-answer', qid: question_id });
+                    resolve();
+                  }, 10);
+                })
+                .catch((error) => {
+                  reject(error);
+                });
+              break;
+            default:
+              resolve();
+              break;
+          }
+          break;
+      }
+    });
   }
+  
+
   
   function renderPagination() {
     return (

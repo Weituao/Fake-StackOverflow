@@ -46,49 +46,73 @@ function QuestionContainers({ questions, updatePage, userSession, username, user
         return null;
     }
   }
-  
-  const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-function upVoteButtonClicked(question) {
-  switch (true) {
-    case !userSession.reputation || userSession.reputation < 50:
-      return Promise.resolve(); // Exit early if reputation is less than 50 or not available
-    case question.voters.some(voter => voter.userVoted === userSession.userId && voter.direction !== 1):
-      break; // Proceed to voting if the user has not voted in the up direction
-    default:
-      return Promise.resolve(); // Exit early if none of the conditions are met
-  }
-
-  // If conditions are met, proceed with upvoting
-  return axios.patch(`http://localhost:8000/posts/questions/incrementVotes/${question._id}/${userSession.userId}`)
-    .then(() => {
-      updatePage(() => 'loading');
-      return sleep(10);
-    })
-    .then(() => {
-      updatePage(() => 'questions');
+  function upVoteButtonClicked(question) {
+    return new Promise((resolve, reject) => {
+      switch (true) {
+        case !(userSession.reputation && userSession.reputation >= 50):
+          resolve();
+          break;
+        default:
+          let userAlreadyVoted = question.voters.filter((voter) => voter.userVoted === userSession.userId);
+          switch (userAlreadyVoted && userAlreadyVoted.direction !== 1) {
+            case true:
+              axios
+                .patch(`http://localhost:8000/posts/questions/incrementVotes/${question._id}/${userSession.userId}`)
+                .then(() => {
+                  updatePage(() => 'loading');
+                  setTimeout(() => {
+                    updatePage(() => 'questions');
+                    resolve();
+                  }, 10);
+                })
+                .catch((error) => {
+                  reject(error);
+                });
+              break;
+            default:
+              resolve();
+              break;
+          }
+          break;
+      }
     });
-}
-
-
-function downVoteButtonClicked(question) {
-  switch (true) {
-    case !(userSession.reputation && userSession.reputation >= 50):
-      return Promise.resolve(); // Exit early if reputation is less than 50 or not available
-    case !(question.voters.find(voter => voter.userVoted === userSession.userId && voter.direction !== -1)):
-      return Promise.resolve(); // Exit early if the user has already voted in the down direction
-    default:
-      return axios.patch(`http://localhost:8000/posts/questions/decrementVotes/${question._id}/${userSession.userId}`)
-        .then(() => {
-          updatePage(() => 'loading');
-          return sleep(10);
-        })
-        .then(() => {
-          updatePage(() => 'questions');
-        });
   }
-}
+  
+  
 
+  function downVoteButtonClicked(question) {
+    return new Promise((resolve, reject) => {
+      switch (true) {
+        case !(userSession.reputation && userSession.reputation >= 50):
+          resolve();
+          break;
+        default:
+          let userAlreadyVoted = question.voters.filter((voter) => voter.userVoted === userSession.userId);
+          switch (userAlreadyVoted && userAlreadyVoted.direction !== -1) {
+            case true:
+              axios
+                .patch(`http://localhost:8000/posts/questions/decrementVotes/${question._id}/${userSession.userId}`)
+                .then(() => {
+                  updatePage(() => 'loading');
+                  setTimeout(() => {
+                    updatePage(() => 'questions');
+                    resolve();
+                  }, 10);
+                })
+                .catch((error) => {
+                  reject(error);
+                });
+              break;
+            default:
+              resolve();
+              break;
+          }
+          break;
+      }
+    });
+  }
+  
 
 
   const questionsList = currentQuestions.map(function(question) {
@@ -123,12 +147,6 @@ function downVoteButtonClicked(question) {
           },
           'Downvote'
         )
-      ),
-      React.createElement(
-        'div',
-        { className: 'question-ans-views-div' },
-        React.createElement('h6', null, question.answers.length, ' answers'),
-        React.createElement('h6', null, question.views, ' views')
       ),
       React.createElement(
         'div',
@@ -172,13 +190,16 @@ function downVoteButtonClicked(question) {
       React.createElement(
         'div',
         { className: 'question-metadata-div' },
-        React.createElement('h4', { id: question.asked_by }, question.username, ' '),
-        React.createElement('h5', null, 'asked ', generateDate(question.ask_date_time, new Date()), ' ')
+        React.createElement('h6', null, question.answers.length, ' answers'),
+        React.createElement('h6', null, question.views, ' views'),
+        React.createElement('h4', { id: question.asked_by }, question.username, '\u00A0'),
+        React.createElement('h5', null, 'asked ', generateDate(question.ask_date_time, new Date()), ' '),
       ),
       React.createElement('hr', null),
       React.createElement(CommentContainer, { question_id: question._id, updatePage: updatePage, userSession: userSession })
     );
   });
+  
 
   function renderPagination() {
     return React.createElement(

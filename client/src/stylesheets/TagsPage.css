@@ -5,6 +5,8 @@
   height: 20%;
 }
 
+
+
 #top-upper-main-tags {
   position: absolute;
   left: 0;
@@ -15,10 +17,12 @@
 
 #top-upper-main-title-tags {
   position: absolute;
-  left: 50%;
-  top: 50%;
+  left: 49%;
+  top: 43%;
   transform: translate(-50%, -50%);
-  font-family: Arial, Helvetica, sans-serif;
+  display: inline-block;
+  text-align: center;
+  font-style: italic;
 }
 
 #top-upper-main-tags {
@@ -31,25 +35,29 @@
 
 #number-of-tags {
   position: absolute;
-  left: 5%;
-  top: 50%;
-  transform: translate(0%, -50%);
-  font-family: Arial, Helvetica, sans-serif;
-  font-weight: bold;
+  left: 15%;
+  top: 43%;
+  transform: translate(-50%, -50%);
+  display: inline-block;
+  text-align: center;
+  font-style: italic;
 }
 
 #top-upper-main-tags button {
-  float: right;
-  position: relative;
-  margin-right: 5%;
-  top: 25%;
-  width: 10%;
-  height: 75%;
-  background-color: rgb(45, 150, 211);
-  font-family: Arial, Helvetica, sans-serif;
-  font-weight: bold;
-  color: white;
-  font-size: 100%;
+  #top-upper-main-ask {
+    float: right;
+    position: relative;
+    margin-right: 5%;
+    top: 25%;
+    width: 10%;
+    height: 75%;
+    background-color: rgb(70, 73, 240);
+    font-weight: bold;
+    color: white;
+    border-radius: 5px;
+    font-size: 10px;
+    cursor: pointer;
+  }
 }
 
 ul#tags-wrapper li {
@@ -86,8 +94,8 @@ ul#tags-wrapper li:nth-child(3n + 1) {
 }
 
 .tag-container {
-  padding: 1%;
+  padding: 4%;
   text-align: center;
-  border: dotted 2px black;
-  float: left;
+  border: dotted 4px black;
+  border-radius: 50px;
 }

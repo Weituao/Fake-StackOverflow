@@ -58,14 +58,12 @@ function Header({ setSearch, updatePage, updateSession, currentSession, welcomeP
   return (
     React.createElement('div', { id: 'header', className: 'header' }, [
       React.createElement('div', { id: 'header-button-div' }, [
-        React.createElement('button', { onClick: headerButtonClicked }, currentSession.loggedIn ? 'Log Out' : 'Log In')
+        React.createElement('button', { onClick: headerButtonClicked, style: { width: '140%', height: '140%' } }, currentSession.loggedIn ? 'Log Out' : 'Log In'),
       ]),
       React.createElement('div', { id: 'header-title-div' }, [
-        React.createElement('a', {
-          id: 'header-title',
-          href: '/',
-          onClick: handleTitleClick
-        }, 'Fake Stack Overflow')
+        React.createElement('span', {
+          id: 'header-title'
+        }, 'Fake Stackoverflow')
       ]),
       React.createElement('div', { id: 'header-search-div' }, [
         React.createElement('input', {
@@ -77,6 +75,7 @@ function Header({ setSearch, updatePage, updateSession, currentSession, welcomeP
         })
       ])
     ])
+    
   );
 }
 

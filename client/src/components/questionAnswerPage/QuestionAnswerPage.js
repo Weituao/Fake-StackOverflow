@@ -48,8 +48,8 @@ function QuestionAnswerPage({ updatePage, qid, currentSession, username, userid 
             React.createElement('div', { id: 'bottom-upper-mainAns' },
               React.createElement('h3', { id: 'top-upper-main-numViews' }, `${question.views} views`),
               React.createElement('p', { id: 'top-upper-main-questionContent' }, parseContent(question.text)),
-              React.createElement('div', { id: 'question-content-div-bottom' },
-                React.createElement(GenerateHtmlForTags, { tagIds: question.tags, qid: question._id })
+              React.createElement('div', { id: 'question-content-div-bottom', style: { marginTop: '10%' } },
+              React.createElement(GenerateHtmlForTags, { tagIds: question.tags, qid: question._id })
               ),
               React.createElement('div', { className: 'top-upper-main-QAskedBy' },
                 React.createElement('h4', { id: question.asked_by }, `${question.username} `),

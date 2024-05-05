@@ -57,17 +57,18 @@ function WelcomePage() {
         React.createElement('div', { className: 'wp-main-div' }),
         React.createElement('div', { className: 'centered' },
           React.createElement('h1', { className: 'wp-h1' }, 'Fake Stackoverflow'),
-          React.createElement('div', { className: 'wp-button-container' },
-            React.createElement('button', { disabled: isac.loggedIn, onClick: () => getthisp('signup') },
-              'Sign Up | new user |'
-            ),
-            React.createElement('button', { disabled: isac.loggedIn, onClick: () => getthisp('login') },
-              'Log In | existing user |'
-            ),
-            React.createElement('button', { onClick: () => getthisp('guest') },
-              isac.loggedIn ? `Welcome back ${isac.username}` : 'Continue as Guest'
-            )
+          React.createElement('div', { className: 'wp-button-container', style: { display: 'flex', flexDirection: 'column' } },
+          React.createElement('button', { disabled: isac.loggedIn, onClick: () => getthisp('signup'), style: { height: '120%', width: '120%' } },
+            'Sign Up'
+          ),
+          React.createElement('button', { disabled: isac.loggedIn, onClick: () => getthisp('login'), style: { height: '120%', width: '120%' } },
+            'Log In'
+          ),
+          React.createElement('button', { onClick: () => getthisp('guest'), style: { height: '120%', width: '120%' } },
+            isac.loggedIn ? `Welcome back ${isac.username}` : 'Continue as Guest'
           )
+        )
+        
         )
       )
     )

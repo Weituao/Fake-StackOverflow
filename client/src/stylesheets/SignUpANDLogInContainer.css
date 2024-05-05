@@ -5,15 +5,25 @@
     align-items: center;
     height: 100vh;
 }
+
+.button-container {
+  display: flex;
+  width: 100%;
+}
+
+.button-container button {
+  margin-right: 10px; /* Adjust as needed */
+}
+
 .sulg-form {
     display: flex;
     flex-direction: column;
     align-items: center;
     padding: 20px;
-    background-color: #f2f2f2;
+    background-color: #a2bbff;
     border-radius: 5px;
     box-shadow: 0 2px 5px rgba(0,0,0,0.3);
-    width: 50%;
+    width: 70%;
 }
 .sulg-form input[type="text"], .sulg-form input[type="email"], .sulg-form input[type="password"] {
     padding: 10px;
@@ -28,13 +38,13 @@
     margin: 5px;
     border-radius: 5px;
     border: none;
-    background-color: rgb(215, 108, 14);
+    background-color: rgb(70, 73, 240);
     color: white;
     cursor: pointer;
     width: 100%;
 }
 .sulg-form button:hover {
-    background-color: rgb(215, 108, 14);
+    background-color: rgb(70, 73, 240);
 }
 
 .sulg-bottom-div{
@@ -48,7 +58,7 @@
     margin: 5px;
     border-radius: 5px;
     border: none;
-    background-color: rgb(244, 138, 46);
+    background-color: rgb(70, 73, 240);
     color: white;
     cursor: pointer;
 }
@@ -62,12 +72,9 @@ button[disabled]{
 
 
 .new-f-error {
-    margin-top: 0;
-    padding-top: 0;
-    margin-bottom: 1%;
-    margin-bottom: 0.5%;
-    font-family: Arial, Helvetica, sans-serif;
     font-style: italic;
     font-weight: bold;
+    font-size: 120%;
+    padding-bottom: 3%;
     color: rgb(219, 0, 0);
   }

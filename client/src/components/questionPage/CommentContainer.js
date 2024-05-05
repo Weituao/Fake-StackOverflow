@@ -126,12 +126,13 @@ function CommentContainer({ question_id, updatePage, userSession }) {
     
         component = React.createElement(
           'div',
-          { className: 'new-comment-input' },
+          { className: 'new-comment-input', style: { width: '80%', height: '240%', display: 'flex', alignItems: 'center' } },
           React.createElement('textarea', {
             className: 'new-comment-textarea',
             placeholder: 'Add a comment',
             value: commentText,
             onChange: handleCommentTextChange,
+            style: { flex: '1', height: '100%', marginRight: '8px' }
           }),
           React.createElement(
             'button',
@@ -140,6 +141,7 @@ function CommentContainer({ question_id, updatePage, userSession }) {
           ),
           React.createElement('div', { className: 'comment-error' }, commentError)
         );
+        
         break;
       default:
         component = null;

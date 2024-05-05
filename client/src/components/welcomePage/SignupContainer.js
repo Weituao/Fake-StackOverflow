@@ -55,29 +55,34 @@ function SignUpContainer({ updatePage: changep }) {
   
   return React.createElement(React.Fragment, null,
     React.createElement("div", { className: "sulg-container" },
-        React.createElement("h1", null, "Sign Up"),
-        React.createElement("div", { className: "sulg-form" },
-            React.createElement("input", { type: "text", placeholder: "Username", onChange: function (e) { return getf('userName', e.target.value); }, maxLength: "100" }),
-            React.createElement("br", null),
-            React.createElement("label", { htmlFor: "username", className: "new-f-error", id: "f-error" },
-                iser.userName ? iser.userName : ''),
-            React.createElement("input", { type: "email", placeholder: "Email Address", onChange: function (e) { return getf('emailAddress', e.target.value); } }),
-            React.createElement("br", null),
-            React.createElement("label", { htmlFor: "email", className: "new-f-error", id: "f-error" },
-                iser.emailAddress ? iser.emailAddress : ''),
-            React.createElement("input", { type: "password", placeholder: "Password", onChange: function (e) { return getf('password', e.target.value); } }),
-            React.createElement("br", null),
-            React.createElement("label", { htmlFor: "password", className: "new-f-error", id: "f-error" },
-                iser.password ? iser.password : ''),
-            React.createElement("input", { type: "password", placeholder: "Confirm Password", onChange: function (e) { return getf('confirmPassword', e.target.value); } }),
-            React.createElement("br", null),
-            React.createElement("label", { htmlFor: "confirmPassword", className: "new-f-error", id: "f-error" },
-                iser.confirmPassword ? iser.confirmPassword : ''),
-            React.createElement("button", { onClick: validateSignUp }, "Sign Up")),
-
-        React.createElement("div", { className: "sulg-bottom-div" },
-            React.createElement("button", { onClick: gobackhome }, "Back to Welcome Page"),
-            React.createElement("button", { onClick: gotologin }, "Log In"))));
+      React.createElement("h1", { style: { fontSize: '400%', fontStyle: 'italic' } }, "Sign Up"),
+      React.createElement("div", { className: "sulg-form" },
+        React.createElement("input", { type: "text", placeholder: "Username", onChange: function (e) { return getf('userName', e.target.value); }, maxLength: "100", style: { fontStyle: 'italic' } }),
+        React.createElement("br", null),
+        React.createElement("label", { htmlFor: "username", className: "new-f-error", id: "f-error", style: { fontStyle: 'italic' } },
+          iser.userName ? iser.userName : ''),
+        React.createElement("input", { type: "email", placeholder: "Email Address", onChange: function (e) { return getf('emailAddress', e.target.value); }, style: { fontStyle: 'italic' } }),
+        React.createElement("br", null),
+        React.createElement("label", { htmlFor: "email", className: "new-f-error", id: "f-error", style: { fontStyle: 'italic' } },
+          iser.emailAddress ? iser.emailAddress : ''),
+        React.createElement("input", { type: "password", placeholder: "Password", onChange: function (e) { return getf('password', e.target.value); }, style: { fontStyle: 'italic' } }),
+        React.createElement("br", null),
+        React.createElement("label", { htmlFor: "password", className: "new-f-error", id: "f-error", style: { fontStyle: 'italic' } },
+          iser.password ? iser.password : ''),
+        React.createElement("input", { type: "password", placeholder: "Confirm Password", onChange: function (e) { return getf('confirmPassword', e.target.value); }, style: { fontStyle: 'italic' } }),
+        React.createElement("br", null),
+        React.createElement("label", { htmlFor: "confirmPassword", className: "new-f-error", id: "f-error", style: { fontStyle: 'italic' } },
+          iser.confirmPassword ? iser.confirmPassword : ''),
+        React.createElement("div", { className: "button-container" },
+          React.createElement("button", { onClick: validateSignUp, style: { width: '180%' } }, "Sign Up"),
+          React.createElement("button", { onClick: gobackhome, style: { width: '400%' } }, "Welcome Page"),
+          React.createElement("button", { onClick: gotologin, style: { width: '140%' } }, "Log In")
+        )
+      )
+    )
+  );
+  
+  
 
 }
 

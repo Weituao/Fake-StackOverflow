@@ -62,20 +62,26 @@ function validateLogin() {
     
 return React.createElement(React.Fragment, null,
     React.createElement("div", { className: "sulg-container" },
-        React.createElement("h1", null, "Log In"),
+        React.createElement("h1", { style: { fontStyle: 'italic', fontSize: '500%' } }, "Log In"),
         React.createElement("div", { className: "sulg-form" },
-            React.createElement("input", { type: "email", placeholder: "Email Address", onChange: setEmailAddress }),
+            React.createElement("input", { type: "email", placeholder: "Email Address", onChange: setEmailAddress, style: { fontStyle: 'italic' } }),
             React.createElement("br", null),
             React.createElement("label", { htmlFor: "email", className: "new-f-error", id: "f-error" },
                 hasError.emailAddress === null ? '' : hasError.emailAddress),
-            React.createElement("input", { type: "password", placeholder: "Password", onChange: setPassword }),
+            React.createElement("input", { type: "password", placeholder: "Password", onChange: setPassword, style: { fontStyle: 'italic' } }),
             React.createElement("br", null),
             React.createElement("label", { htmlFor: "password", className: "new-f-error", id: "f-error" },
                 hasError.password === null ? '' : hasError.password),
-            React.createElement("button", { onClick: validateLogin }, "Log In")),
-        React.createElement("div", { className: "sulg-bottom-div" },
-            React.createElement("button", { onClick: returntoWelcomePage }, "Back to Welcome Page"),
-            React.createElement("button", { onClick: directToSignUpPage }, "Sign Up"))));
+            React.createElement("div", { className: "button-container" },
+                React.createElement("button", { onClick: validateLogin }, "Log In"),
+                React.createElement("button", { onClick: returntoWelcomePage }, "Back to Welcome Page"),
+                React.createElement("button", { onClick: directToSignUpPage }, "Sign Up")
+            )
+        ),
+    )
+);
+
+
 
 };
 
