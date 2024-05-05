@@ -1,10 +1,11 @@
 function auth(req, res, next) {
-    if (req.session.user && req.session.user.loggedIn) {
+  switch (true) {
+    case req.session.user && req.session.user.loggedIn:
       next();
-    } else {
+      break;
+    default:
       res.status(401).send('Unauthorized');
-    }
   }
-  
-  module.exports = auth;
-  
+}
+
+module.exports = auth;

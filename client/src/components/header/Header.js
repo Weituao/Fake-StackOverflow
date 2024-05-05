@@ -37,12 +37,6 @@ function Header({ setSearch, updatePage, updateSession, currentSession, welcomeP
           .catch(handleLogin)
       : handleLogout();
   }
-  
-  
-  
-
-  const handleTitleClick = () => false;
-
 
   useEffect(() => {
     const updateSessionData = (res) => updateSession(res.data);

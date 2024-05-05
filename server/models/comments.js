@@ -1,8 +1,5 @@
-// Comment Document Schema
 let mongoose = require('mongoose');
-
 let Schema = mongoose.Schema;
-
 let CommentSchema = new Schema(
     {
         text : {type: String , required: true},
@@ -16,12 +13,10 @@ let CommentSchema = new Schema(
     }
 );
 
-// Virtual for CommentSchema's URL
 CommentSchema
 .virtual('url')
 .get(function () {
   return 'posts/comment/_id/' + this._id;
 });
 
-//Export model
 module.exports = mongoose.model('Comment', CommentSchema);

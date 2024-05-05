@@ -1,25 +1,23 @@
 // Routing to /posts/users
-const express = require('express');
-const router = express.Router();
-const bcrypt = require('bcrypt');
+const rgegegre = require('express');
+const therfwrfg = rgegegre.Router();
+const rthsdftrh = require('bcrypt');
+const edrthrge = require('../models/users');
+const thrfdty = require('../models/answers');
+const jyfedt = require('../models/questions');
+const jyfgd = require('../models/comments');
+const wqdhk = require('../models/tags');
 
-const User = require('../models/users');
-const Answer = require('../models/answers');
-const Question = require('../models/questions');
-const Comment = require('../models/comments');
-const Tag = require('../models/tags');
-
-router.post('/signUp', async (req, res) => {
+therfwrfg.post('/signUp', async (req, res) => {
   let newUser = req.body;
-
   let emailFound;
-  User.findOne({ email: newUser.email })
+  edrthrge.findOne({ email: newUser.email })
     .then((found) => {
       emailFound = found;
-      return emailFound ? Promise.reject('An account with that email address already exists.') : bcrypt.hash(newUser.password, 10);
+      return emailFound ? Promise.reject('An account with that email address already exists.') : rthsdftrh.hash(newUser.password, 10);
     })
     .then((hashedPassword) => {
-      let user = new User({
+      let user = new edrthrge({
         username: newUser.username,
         email: newUser.email,
         password: hashedPassword,
@@ -32,19 +30,19 @@ router.post('/signUp', async (req, res) => {
     })
     .catch((err) => {
       console.log(err);
-      res.send(!emailFound ? 'Internal Server Error occurred while saving the user. Please try again.' : 'Internal Server Error occurred while hashing the password. Please try again.');
+      res.send(!emailFound ? 'Internal Server Error occurred while saving the user. Please try again.' : 'An account with that email is already used.');
     });
 });
 
-router.post('/logIn', async (req, res) => {
+therfwrfg.post('/logIn', async (req, res) => {
   let email = req.body.email;
   let password = req.body.password;
 
-  User.findOne({ email: email }).exec()
+  edrthrge.findOne({ email: email }).exec()
     .then(userFound => {
       return !userFound ?
         res.send('An account with the given Email Address does not exist.') :
-        bcrypt.compare(password, userFound.password)
+        rthsdftrh.compare(password, userFound.password)
           .then(isMatch => {
             return isMatch ?
               (req.session.user = {
@@ -67,48 +65,48 @@ router.post('/logIn', async (req, res) => {
 });
 
 
-router.get('/session', (req, res) => {
+therfwrfg.get('/session', (req, res) => {
   res.send(req.session.user ? req.session.user : 'Session not found');
 });
 
 
-router.post('/logout', (req, res) => {
+therfwrfg.post('/logout', (req, res) => {
   req.session.destroy((err) => {
     err ? res.send(err) : res.send('success');
   });
 });
 
 
-router.get('/admin', (req, res) => {
-  User.find({}).exec()
+therfwrfg.get('/admin', (req, res) => {
+  edrthrge.find({}).exec()
     .then(users => res.send(users.map(user => ({ ...user.toObject(), password: undefined }))))
     .catch(err => res.send('Internal Server Error occurred. Please try again.'));
 });
 
 
-router.get('/getUsername/:id', (req, res) => {
-  User.findById(req.params.id).exec()
+therfwrfg.get('/getUsername/:id', (req, res) => {
+  edrthrge.findById(req.params.id).exec()
     .then(user => res.send(user ? user.username : 'User not found'))
     .then(null, () => res.send('Internal Server Error occurred. Please try again.'));
 });
 
 
-router.get('/getUserData/:id', (req, res) => {
-  User.findById(req.params.id).exec()
+therfwrfg.get('/getUserData/:id', (req, res) => {
+  edrthrge.findById(req.params.id).exec()
     .then(user => res.send(user ? (user.password = undefined, user) : 'User not found'))
     .catch(() => res.send('Internal Server Error occurred. Please try again.'));
 });
 
 
-router.delete('/deleteUser/:id', async (req, res) => {
+therfwrfg.delete('/deleteUser/:id', async (req, res) => {
   req.session.user.isAdmin ? (
     await (async () => {
       try {
-        const questions = await Question.find({ asked_by: req.params.id }).exec();
+        const questions = await jyfedt.find({ asked_by: req.params.id }).exec();
         await Promise.all(questions.map(async (question) => {
           await Promise.all(question.answers.map(async (answer) => {
             try {
-              await Answer.findByIdAndDelete(answer).exec();
+              await thrfdty.findByIdAndDelete(answer).exec();
             } catch (err) {
               console.log(err);
               res.send('Internal Server Error occurred. Please try again.');
@@ -116,27 +114,27 @@ router.delete('/deleteUser/:id', async (req, res) => {
           }));
           await Promise.all(question.comments.map(async (comment) => {
             try {
-              await Comment.findByIdAndDelete(comment).exec();
+              await jyfgd.findByIdAndDelete(comment).exec();
             } catch (err) {
               console.log(err);
               res.send('Internal Server Error occurred. Please try again.');
             }
           }));
         }));
-        await Question.deleteMany({ asked_by: req.params.id }).exec();
-        await Answer.deleteMany({ ans_by: req.params.id }).exec();
-        await Comment.deleteMany({ com_by: req.params.id }).exec();
-        const tags = await Tag.find({ created_By: req.params.id }).exec();
+        await jyfedt.deleteMany({ asked_by: req.params.id }).exec();
+        await thrfdty.deleteMany({ ans_by: req.params.id }).exec();
+        await jyfgd.deleteMany({ com_by: req.params.id }).exec();
+        const tags = await wqdhk.find({ created_By: req.params.id }).exec();
         await Promise.all(tags.map(async (tag) => {
           let shouldDeleteTag = true;
-          const questionUsingTag = await Question.find({ tags: tag._id.toString() }).exec();
+          const questionUsingTag = await jyfedt.find({ tags: tag._id.toString() }).exec();
           if (questionUsingTag.some(question => question.asked_by.toString() !== tag.created_By.toString())) {
             shouldDeleteTag = false;
           }
           shouldDeleteTag ? (
             await (async () => {
               try {
-                await Tag.deleteOne({ _id: tag._id }).exec();
+                await wqdhk.deleteOne({ _id: tag._id }).exec();
               } catch (err) {
                 console.log(err);
                 res.send('Internal Server Error occurred. Please try again.');
@@ -145,7 +143,7 @@ router.delete('/deleteUser/:id', async (req, res) => {
           ) : (
             await (async () => {
               try {
-                await Tag.updateOne({ _id: tag._id }, { $set: { created_By: req.session.user.userId } }).exec();
+                await wqdhk.updateOne({ _id: tag._id }, { $set: { created_By: req.session.user.userId } }).exec();
               } catch (err) {
                 console.log(err);
                 res.send('Internal Server Error occurred. Please try again.');
@@ -154,7 +152,7 @@ router.delete('/deleteUser/:id', async (req, res) => {
           );
         }));
         try {
-          await User.findByIdAndDelete(req.params.id).exec();
+          await edrthrge.findByIdAndDelete(req.params.id).exec();
           res.send('success');
         } catch (err) {
           console.log(err);
@@ -172,4 +170,4 @@ router.delete('/deleteUser/:id', async (req, res) => {
 });
 
 
-module.exports = router;
+module.exports = therfwrfg;

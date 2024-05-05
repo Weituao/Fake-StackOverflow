@@ -1,8 +1,5 @@
-// Question Document Schema
 let mongoose = require('mongoose');
-
 let Schema = mongoose.Schema;
-
 let QuestionSchema = new Schema({
   title: { type: String, maxLength: 50, required: true },
   summary: { type: String, maxLength: 140, required: true },
@@ -20,15 +17,13 @@ let QuestionSchema = new Schema({
   votes: { type: Number, default: 0 },
   comments: { type: [Schema.Types.ObjectId], ref: 'Comment' },
   voters: [{
-    userVoted: { type: Schema.Types.ObjectId, ref: 'User'},
-    direction: { type: Number, default: 0},
+    tryerf: { type: Schema.Types.ObjectId, ref: 'User'},
+    werrtverg: { type: Number, default: 0},
   }]
 });
 
-// Virtual for Answer's URL
 QuestionSchema.virtual('url').get(function () {
   return 'posts/question/_id/' + this._id;
 });
 
-//Export model
 module.exports = mongoose.model('Question', QuestionSchema);

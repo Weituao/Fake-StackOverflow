@@ -1,4 +1,4 @@
-function generateDate(time1, time2) {
+export default  function generateDate(time1, time2) {
   time1 = new Date(time1);
   let gapbetween = time2 - time1;
   let gapbtweensec = gapbetween / 1000;
@@ -13,5 +13,3 @@ function generateDate(time1, time2) {
     ? `${time1.toLocaleString('default', { month: 'short' })} ${time1.getDate()} at ${('0' + time1.getHours()).slice(-2)}:${('0' + time1.getMinutes()).slice(-2)}`
     : `${time1.toLocaleString('default', { month: 'short' })} ${time1.getDate()}, ${time1.getFullYear()} at ${('0' + time1.getHours()).slice(-2)}:${('0' + time1.getMinutes()).slice(-2)}`;
 }
-
-export default generateDate;

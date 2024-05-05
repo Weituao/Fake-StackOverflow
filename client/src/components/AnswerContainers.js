@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import parseContent from '../utils/parseContent';
-import generateDate from '../utils/generateDate';
-import CommentContainer from './CommentContainer';
+import parseContent from './parseContent';
+import generateDate from './generateDate';
+import CommentContainer from './questionAnswerPage/CommentContainer';
 import axios from 'axios';
 
 function AnswerContainers({ question_id, updatePage, userSession, username, userid }) {
@@ -186,11 +186,13 @@ function AnswerContainers({ question_id, updatePage, userSession, username, user
           React.createElement('p', null, parseContent(element.text))
         ),
         React.createElement('div', { className: 'answer-metadata-div' },
-          renderDeleteAndEditButton(element),
-          element._id === deleteAnswer.answer_id ? createDeleteWarn() : null,
-          React.createElement('h4', { id: element.ans_by }, element.username, ' '),
-          React.createElement('h5', null, 'asked ', generateDate(element.ans_date_time, timeNow), ' ')
-        ),
+        renderDeleteAndEditButton(element),
+        element._id === deleteAnswer.answer_id ? createDeleteWarn() : null,
+        React.createElement('h4', { id: element.ans_by }, element.username + '  '),
+        React.createElement('h5', null, 'answered ',  generateDate(element.ans_date_time, timeNow), ' ')
+
+      ),
+      
         React.createElement('hr', null),
         React.createElement(CommentContainer, {
           question_id: question_id,

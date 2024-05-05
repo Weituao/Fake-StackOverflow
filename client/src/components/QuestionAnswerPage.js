@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import '../../stylesheets/QuestionAnswerPage.css';
-import GenerateHtmlForTags from '../utils/generateHtmlForTags';
+import '../stylesheets/QuestionAnswerPage.css';
+import GenerateHtmlForTags from './generateHtmlForTags';
 import AnswerContainers from './AnswerContainers';
-import parseContent from '../utils/parseContent';
-import generateDate from '../utils/generateDate';
+import parseContent from './parseContent';
+import generateDate from './generateDate';
 import axios from 'axios';
 
 function QuestionAnswerPage({ updatePage, qid, currentSession, username, userid }) {

@@ -3,7 +3,6 @@ const app = express();
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
-
 app.use(
   cors({
     origin: 'http://localhost:3000',
@@ -13,11 +12,7 @@ app.use(
 );
 
 app.use(express.json());
-
-let secretKey = process.argv.slice(2)[0];
-
 const port = 8000;
-
 let mongoose = require('mongoose');
 let mongoDB = 'mongodb://127.0.0.1:27017/fake_so';
 mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true });
@@ -27,16 +22,12 @@ app.use(
     secret: "secretKey",
     cookie: { httpOnly: true, maxAge: 1000 * 60 * 5 * 60 },
     resave: false,
-    saveUninitialized: false,
-  })
-);
+    saveUninitialized: false,}));
 
 app.use(cookieParser());
-
 let db = mongoose.connection;
 db.on('error', (err) => console.log(`Error Connecting: ${err}`));
 db.on('connected', () => console.log('Connected to database'));
-
 process.on('SIGINT', async () => {
   await (db ?
     db.close()
@@ -46,19 +37,17 @@ process.on('SIGINT', async () => {
   );
   process.exit(0);
 });
+const gerg = require('./routes/questions.js');
+const therfw = require('./routes/answers.js');
+const jkjrt = require('./routes/tags.js');
+const hjrg = require('./routes/users.js');
+const edthuj = require('./routes/comments.js');
 
-const questionsRouter = require('./routes/questions.js');
-const answersRouter = require('./routes/answers.js');
-const tagsRouter = require('./routes/tags.js');
-const usersRouter = require('./routes/users.js');
-const commentRouter = require('./routes/comments.js');
-
-app.use('/posts/questions', questionsRouter);
-app.use('/posts/answers', answersRouter);
-app.use('/posts/tags', tagsRouter);
-app.use('/posts/comments', commentRouter);
-app.use('/users/', usersRouter);
-
+app.use('/posts/questions', gerg);
+app.use('/posts/answers', therfw);
+app.use('/posts/tags', jkjrt);
+app.use('/posts/comments', edthuj);
+app.use('/users/', hjrg);
 app.get('/posts', (req, res) => {
   res.redirect('/posts/questions');
 });

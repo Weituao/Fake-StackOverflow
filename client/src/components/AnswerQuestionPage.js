@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import '../../stylesheets/AnswerQuestionPage.css';
-import validateHyperLinks from '../utils/validateHyperLinks';
+import '../stylesheets/AnswerQuestionPage.css';
+import validateHyperLinks from './validateHyperLinks';
 import axios from 'axios';
 
 function AnswerQuestionPage({ updatePage, qid, username, userid, aid, text }) {
@@ -77,7 +77,6 @@ function AnswerQuestionPage({ updatePage, qid, username, userid, aid, text }) {
         validateAnswer(qid);
       }
     }),
-    React.createElement('h3', null, '* indicates mandatory fields')
   );
 }
 

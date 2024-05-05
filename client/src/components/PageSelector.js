@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import '../../stylesheets/NavBar.css';
-import MainPage from '../mainPage/MainPage';
-import Header from '../header/Header';
+import '../stylesheets/NavBar.css';
+import MainPage from './MainPage';
+import Header from './header/Header';
 
 function NavBar({ currentPage, welcomePage, sessionActive, updateSession }) {
   const [selectedNav, setSelectedNav] = useState(currentPage || 'none');

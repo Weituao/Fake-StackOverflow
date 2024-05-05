@@ -1,5 +1,5 @@
 import axios from 'axios';
-import parseContent from '../utils/parseContent';
+import parseContent from './parseContent';
 import React, { useState, useEffect } from 'react';
 
 function CommentContainer({ question_id, updatePage, userSession }) {
@@ -101,8 +101,8 @@ function CommentContainer({ question_id, updatePage, userSession }) {
       case 'User reputation too low':
         setCommentError('You cannot make a comment because your reputation is lower than 50');
         break;
-      case 'Comment must be between 1 and 140 characters':
-        setCommentError('Comment must be between 1 and 140 characters');
+      case 'Comment cannot be empty and no more than 140 characters':
+        setCommentError('Comment cannot be empty and no more than 140 characters');
         break;
       default:
         // Handle any other cases here

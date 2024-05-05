@@ -1,12 +1,12 @@
 import React from 'react';
-import '../../stylesheets/MainPage.css';
-import QuestionsPage from '../questionPage/QuestionsPage';
-import TagsPage from '../tagsPage/TagsPage';
-import AskQuestionPage from '../askQuestionPage/AskQuestionPage';
-import QuestionAnswerPage from '../questionAnswerPage/QuestionAnswerPage';
-import AnswerQuestionPage from '../answerQuestionPage/AnswerQuestionPage';
-import UserPage from '../userPage/UserPage';
-import UserContainer from '../userPage/UserContainer';
+import '../stylesheets/MainPage.css';
+import QuestionsPage from './QuestionsPage';
+import TagsPage from './TagsPage';
+import AskQuestionPage from './AskQuestionPage';
+import QuestionAnswerPage from './QuestionAnswerPage';
+import AnswerQuestionPage from './AnswerQuestionPage';
+import UserPage from './UserPage';
+import UserContainer from './UserContainer';
 
 function MainPage({ currentPage, updatePage, setSearch, currentSearch, currentSession }) {
   switch (currentPage) {

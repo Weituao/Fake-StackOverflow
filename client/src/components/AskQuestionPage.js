@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import '../../stylesheets/AskQuestionPage.css';
-import validateHyperLinks from '../utils/validateHyperLinks';
+import '../stylesheets/AskQuestionPage.css';
+import validateHyperLinks from './validateHyperLinks';
 import axios from 'axios';
 
 function AskQuestionPage({ updatePage, currentSession, editInfo }) {
@@ -60,7 +60,7 @@ function AskQuestionPage({ updatePage, currentSession, editInfo }) {
     tags = tags.filter((tag) => tag.trim() !== '');
     switch (true) {
       case tags.length === 0:
-        newStateHasError = Object.assign({}, newStateHasError, { tags: '*Question must have at least one tag' });
+        newStateHasError = Object.assign({}, newStateHasError, { tags: '*Must have at least one tag' });
         break;
       // Add more cases if needed
       default:
@@ -70,13 +70,13 @@ function AskQuestionPage({ updatePage, currentSession, editInfo }) {
     
     switch (true) {
       case tags.length === 0:
-        newStateHasError = Object.assign({}, newStateHasError, { tags: '*Question must have at least one tag' });
+        newStateHasError = Object.assign({}, newStateHasError, { tags: '*Must have at least one tag' });
         break;
       case tags.length > 5:
-        newStateHasError = Object.assign({}, newStateHasError, { tags: '*Question cannot have more than 5 tags' });
+        newStateHasError = Object.assign({}, newStateHasError, { tags: '*Cannot have more than 5 tags' });
         break;
-      case tags.some(tag => tag.length > 10):
-        newStateHasError = Object.assign({}, newStateHasError, { tags: '*Tag cannot have more than 10 characters' });
+      case tags.some(tag => tag.length > 20):
+        newStateHasError = Object.assign({}, newStateHasError, { tags: '*Tags cannot have more than 20 characters' });
         break;
       default:
         // No errors found
@@ -111,14 +111,14 @@ function AskQuestionPage({ updatePage, currentSession, editInfo }) {
         newStateHasError = Object.assign({}, newStateHasError, { summary: '*Summary cannot have more than 140 characters' });
         break;
       case question.content === '':
-        newStateHasError = Object.assign({}, newStateHasError, { content: '*Description field cannot be empty' });
+        newStateHasError = Object.assign({}, newStateHasError, { content: '*Description cannot be empty' });
         break;
       default:
         let foundError = validateHyperLinks(question.content);
         switch (foundError) {
           case true:
             newStateHasError = Object.assign({}, newStateHasError, {
-              content: '*Constraints violated. The target of a hyperlink, that is, the stuff within () cannot be empty and must begin with “https://” or “http://”.',
+              content: '*Hyperlink cannot be empty and must start with http:// or https://',
             });
             break;
           default:
@@ -234,7 +234,7 @@ function AskQuestionPage({ updatePage, currentSession, editInfo }) {
     }),
     React.createElement('br'),
     React.createElement('br'),
-    React.createElement('label', { htmlFor: 'title', className: 'new-q-error', id: 'title-error' }, hasError.title ? '*Title field cannot be empty' : ''),
+    React.createElement('label', { htmlFor: 'title', className: 'new-q-error', id: 'title-error' }, hasError.title ? '*Title cannot be empty' : ''),
     React.createElement('h2', null, 'Question Summary*'),
     React.createElement('label', { htmlFor: 'summary' }, 'Limit summary to 140 characters or less'),
     React.createElement('input', {
@@ -291,7 +291,6 @@ function AskQuestionPage({ updatePage, currentSession, editInfo }) {
       value: 'Post Question',
       onClick: validateQuestion,
     }),
-    React.createElement('h3', null, '* indicates mandatory fields')
   );
 }
 

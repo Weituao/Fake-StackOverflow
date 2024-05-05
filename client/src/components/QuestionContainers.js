@@ -1,53 +1,41 @@
-import generateDate from '../utils/generateDate';
-import GenerateHtmlForTags from '../utils/generateHtmlForTags';
+import generateDate from './generateDate';
+import GenerateHtmlForTags from './generateHtmlForTags';
 import CommentContainer from './CommentContainer';
 import axios from 'axios';
 import React, { useState } from 'react';
 
-function QuestionContainers({ questions, updatePage, userSession, username, userid }) {
-  const [currentPage, setCurrentPage] = useState(1);
-  const questionsPerPage = 5;
-  const indexOfLastQuestion = currentPage * questionsPerPage;
-  const indexOfFirstQuestion = indexOfLastQuestion - questionsPerPage;
-  const currentQuestions = questions.slice(indexOfFirstQuestion, indexOfLastQuestion);
-  const totalPages = Math.ceil(questions.length / questionsPerPage);
-
-  function handleNextClick() {
+export default function QuestionContainers({ questions, updatePage, userSession, username, userid }) {
+  const [egrger, setCurrentPage] = useState(1);
+  const rtyefcs = 5;
+  const rtherfc = egrger * rtyefcs;
+  const tywef = rtherfc - rtyefcs;
+  const rtvhefc = questions.slice(tywef, rtherfc);
+  const totalPages = Math.ceil(questions.length / rtyefcs);
+  function yrgerfc() {
     setCurrentPage(function(currentPage) {
-      return currentPage === totalPages ? 1 : currentPage + 1;
-    });
-  }
-  
+      return currentPage === totalPages ? 1 : currentPage + 1;}); }
 
-  function handleBackClick() {
+  function thrsef() {
     setCurrentPage(function(currentPage) {
-      return currentPage === 1 ? currentPage : currentPage - 1;
-    });
-  }
+      return currentPage === 1 ? currentPage : currentPage - 1; });}
   
-  switch (currentQuestions.length) {
+  switch (rtvhefc.length) {
     case 0:
       return React.createElement(
         'div',
         { id: 'no-question-found' },
-        React.createElement('h1', null, 'No questions found')
-      );
+        React.createElement('h1', null, 'No questions found') );
     default:
-      // Your default case or subsequent logic if needed
-      break;
-  }
-  
+      break; }
 
-  function writeSummaryIfExist(question) {
+  function v6hrerc(question) {
     switch (question.summary !== undefined) {
       case true:
         return React.createElement('p', null, question.summary);
       default:
-        return null;
-    }
-  }
+        return null; }}
 
-  function upVoteButtonClicked(question) {
+  function vercgwefrth(question) {
     return new Promise((resolve, reject) => {
       switch (true) {
         case !(userSession.reputation && userSession.reputation >= 50):
@@ -63,25 +51,16 @@ function QuestionContainers({ questions, updatePage, userSession, username, user
                   updatePage(() => 'loading');
                   setTimeout(() => {
                     updatePage(() => 'questions');
-                    resolve();
-                  }, 10);
-                })
+                    resolve();}, 10);})
                 .catch((error) => {
-                  reject(error);
-                });
+                  reject(error); });
               break;
             default:
               resolve();
-              break;
-          }
-          break;
-      }
-    });
-  }
-  
-  
+              break; }
+        break;}});}
 
-  function downVoteButtonClicked(question) {
+  function yhberfc(question) {
     return new Promise((resolve, reject) => {
       switch (true) {
         case !(userSession.reputation && userSession.reputation >= 50):
@@ -97,25 +76,16 @@ function QuestionContainers({ questions, updatePage, userSession, username, user
                   updatePage(() => 'loading');
                   setTimeout(() => {
                     updatePage(() => 'questions');
-                    resolve();
-                  }, 10);
-                })
+                    resolve();  }, 10);  })
                 .catch((error) => {
-                  reject(error);
-                });
+                  reject(error); });
               break;
             default:
               resolve();
-              break;
-          }
-          break;
-      }
-    });
-  }
-  
+              break; }
+          break;  }});}
 
-
-  const questionsList = currentQuestions.map(function(question) {
+  const rthbrfc = rtvhefc.map(function(question) {
     return React.createElement(
       'div',
       { key: question._id, className: 'question-container' },
@@ -128,12 +98,9 @@ function QuestionContainers({ questions, updatePage, userSession, username, user
             disabled:
               !userSession.loggedIn || userSession.reputation < 50 || userSession.userId === question.asked_by,
             onClick: function() {
-              upVoteButtonClicked(question);
-            },
-            className: 'upvote-button',
-          },
-          'Upvote'
-        ),
+              vercgwefrth(question);},
+            className: 'upvote-button',  },
+          'Upvote'  ),
         React.createElement('div', { className: 'vote-counter' }, question.votes),
         React.createElement(
           'button',
@@ -141,13 +108,9 @@ function QuestionContainers({ questions, updatePage, userSession, username, user
             disabled:
               !userSession.loggedIn || userSession.reputation < 50 || userSession.userId === question.asked_by,
             onClick: function() {
-              downVoteButtonClicked(question);
-            },
-            className: 'downvote-button',
-          },
-          'Downvote'
-        )
-      ),
+              yhberfc(question); },
+            className: 'downvote-button',   },
+          'Downvote'  )),
       React.createElement(
         'div',
         { className: 'question-content-div' },
@@ -165,56 +128,37 @@ function QuestionContainers({ questions, updatePage, userSession, username, user
                       currentPage: 'question-answer-user',
                       qid: question._id,
                       username: username,
-                      userid: userid,
-                    });
+                      userid: userid, });
                     break;
                   default:
                     axios
                       .patch('http://localhost:8000/posts/questions/incrementViews/' + question._id)
                       .then(() => {
-                        updatePage({ currentPage: 'question-answer', qid: question._id });
-                      })
+                        updatePage({ currentPage: 'question-answer', qid: question._id });   })
                       .catch(() => {
-                        alert('An Error Occurred');
-                      });
-                    break;
-                }
-              },
-            },
-            question.title
-          ),
-          writeSummaryIfExist(question),
-          React.createElement(GenerateHtmlForTags, { tagIds: question.tags, qid: question._id })
-        )
-      ),
+                        alert('An Error Occurred');    });
+                    break; }  }, },
+            question.title),
+          v6hrerc(question),
+          React.createElement(GenerateHtmlForTags, { tagIds: question.tags, qid: question._id }) ) ),
       React.createElement(
         'div',
         { className: 'question-metadata-div' },
         React.createElement('h6', null, question.answers.length, ' answers'),
         React.createElement('h6', null, question.views, ' views'),
         React.createElement('h4', { id: question.asked_by }, question.username, '\u00A0'),
-        React.createElement('h5', null, 'asked ', generateDate(question.ask_date_time, new Date()), ' '),
-      ),
+        React.createElement('h5', null, 'asked ', generateDate(question.ask_date_time, new Date()), ' '),  ),
       React.createElement('hr', null),
-      React.createElement(CommentContainer, { question_id: question._id, updatePage: updatePage, userSession: userSession })
-    );
-  });
-  
+      React.createElement(CommentContainer, { question_id: question._id, updatePage: updatePage, userSession: userSession }) );});
 
-  function renderPagination() {
+  function rtvhbefcw() {
     return React.createElement(
       'div',
       { className: 'pagination' },
       React.createElement(
         'button',
-        { className: 'pagination-button', disabled: currentPage === 1, onClick: handleBackClick },
-        'Back'
-      ),
-      React.createElement('button', { className: 'pagination-button', onClick: handleNextClick }, 'Next')
-    );
-  }
+        { className: 'pagination-button', disabled: egrger === 1, onClick: thrsef },
+        'Back' ),
+      React.createElement('button', { className: 'pagination-button', onClick: yrgerfc }, 'Next')  ); }
+  return React.createElement(React.Fragment, null, React.createElement('div', { className: 'all-question-containers' }, rthbrfc), rtvhbefcw());}
 
-  return React.createElement(React.Fragment, null, React.createElement('div', { className: 'all-question-containers' }, questionsList), renderPagination());
-}
-
-export default QuestionContainers;
