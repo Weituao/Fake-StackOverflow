@@ -3,42 +3,36 @@ import '../stylesheets/NavBar.css';
 import MainPage from './MainPage';
 import Header from './header/Header';
 
-function NavBar({ currentPage, welcomePage, sessionActive, updateSession }) {
-  const [selectedNav, setSelectedNav] = useState(currentPage || 'none');
-  const [currentSearch, setSearch] = useState({ tagSearch: false, search: '' });
+export default function NavBar({ currentPage: ercgrtvhg, welcomePage: tgverfc, sessionActive: rctgfexr, updateSession: wecergv }) {
+  const [ttvyr, rtutyb] = useState(ercgrtvhg || 'none');
+  const [ecwtvh, rtvherfc] = useState({ tagSearch: false, search: '' });
 
   function updateSelectedNav(navValue) {
-    setSelectedNav(navValue);
-  }
+    rtutyb(navValue);  }
 
   function updateSearch(searchValue) {
-    setSearch(searchValue);
-  }
+    rtvherfc(searchValue);}
 
   function navQuestionClick() {
-    setSelectedNav('questions');
-    setSearch({ tagSearch: false, search: '' });
-  }
+    rtutyb('questions');
+    rtvherfc({ tagSearch: false, search: '' }); }
 
   function navTagsClick() {
-    setSelectedNav('tags');
-    setSearch({ tagSearch: false, search: '' });
-  }
+    rtutyb('tags');
+    rtvherfc({ tagSearch: false, search: '' }); }
 
   function navUserClick() {
-    setSelectedNav('user');
-    setSearch({ tagSearch: false, search: '' });
-  }
+    rtutyb('user');
+    rtvherfc({ tagSearch: false, search: '' });}
 
   return (
     React.createElement('div', null,
       React.createElement(Header, {
         setSearch: updateSearch,
         updatePage: updateSelectedNav,
-        updateSession: updateSession,
-        currentSession: sessionActive,
-        welcomePage: welcomePage
-      }),
+        updateSession: wecergv,
+        currentSession: rctgfexr,
+        welcomePage: tgverfc }),
       React.createElement('div', { id: 'nav-main-div' },
         React.createElement('div', { id: 'nav', className: 'nav' },
           React.createElement('button', {
@@ -46,36 +40,22 @@ function NavBar({ currentPage, welcomePage, sessionActive, updateSession }) {
             onClick: navQuestionClick,
             className: 'nav-button',
             style: {
-              backgroundColor: selectedNav === 'questions' ? 'lightgray' : 'white'
-            }
-          }, 'Questions'),
+              backgroundColor: ttvyr === 'questions' ? 'grey' : 'white' }}, 'Questions'),
           React.createElement('button', {
             id: 'nav-tags',
             onClick: navTagsClick,
             className: 'nav-button',
             style: {
-              backgroundColor: selectedNav === 'tags' ? 'lightgray' : 'white'
-            }
-          }, 'Tags'),
+              backgroundColor: ttvyr === 'tags' ? 'grey' : 'white' }}, 'Tags'),
           React.createElement('button', {
             id: 'nav-tags',
             onClick: navUserClick,
             className: 'nav-button',
             style: {
-              backgroundColor: selectedNav === 'user' ? 'lightgray' : 'white'
-            }
-          }, 'User')
-        ),
+              backgroundColor: ttvyr === 'user' ? 'grey' : 'white' }}, 'User')),
         React.createElement(MainPage, {
-          currentPage: selectedNav,
+          currentPage: ttvyr,
           updatePage: updateSelectedNav,
           setSearch: updateSearch,
-          currentSearch: currentSearch,
-          currentSession: sessionActive
-        })
-      )
-    )
-  );
-}
-
-export default NavBar;
+          currentSearch: ecwtvh,
+          currentSession: rctgfexr }))));}

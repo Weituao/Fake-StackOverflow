@@ -63,9 +63,4 @@ export default function SignUpContainer({ updatePage: changep }) {
         React.createElement("div", { className: "button-container" },
           React.createElement("button", { onClick: isthesingup, style: { width: '180%' } }, "Sign Up"),
           React.createElement("button", { onClick: gobackhome, style: { width: '400%' } }, "Welcome Page"),
-          React.createElement("button", { onClick: gotologin, style: { width: '140%' } }, "Log In")
-        )
-      )
-    )
-  );
-}
+          React.createElement("button", { onClick: gotologin, style: { width: '140%' } }, "Log In") ) )) );}

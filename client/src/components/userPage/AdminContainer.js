@@ -25,7 +25,7 @@ export default function AdminContainer({ updatePage, currentSession }) {
   function displayUsers() {
     return usersList === 'error' ? (
       React.createElement('h1', { id: 'users-error-message' }, [
-        'An error occurred while fetching Users from the server. Please try again later.',
+        'Error, please try again later',
         React.createElement('br', null),
         React.createElement('br', null),
         React.createElement('div', { onClick: () => window.location.reload(false) }, 'Return to Welcome Page')
@@ -40,7 +40,7 @@ export default function AdminContainer({ updatePage, currentSession }) {
               ? (
                 setUsersList(usersList.filter(user => user._id !== qwexrytv)),
                 setShowWarning({ warning: false, userId: '' }) )
-              : alert('An error occurred while deleting the user. Please try again later.') );};
+              : alert('Error, please try again later') );};
         return React.createElement(React.Fragment, { key: user._id }, [
           React.createElement('div', { className: 'user-container', key: user._id + 'container' }, [
             React.createElement('button', {
@@ -52,7 +52,7 @@ export default function AdminContainer({ updatePage, currentSession }) {
               onClick: () => updatePage({ currentPage: 'admin-user', userid: user._id })}, user._id === currentSession.userId ? user.username + ' (My Account)' : user.username)]),
           showWarning.userId === user._id && (
             React.createElement('div', { className: 'warning', key: user._id + 'warning' }, [
-              React.createElement('p', { key: user._id + 'warningp' }, 'Are you sure you want to delete this user?'),
+              React.createElement('p', { key: user._id + 'warningp' }, 'Delete User?'),
               React.createElement('button', { key: user._id + 'deleteUser', onClick: rtvywex }, 'Delete User'),
               React.createElement('button', { key: user._id + 'cancel', onClick: yujnerfc }, 'Cancel') ]) ), React.createElement('hr', { key: user._id + 'hr' }) ]);})));}
   
@@ -60,7 +60,7 @@ export default function AdminContainer({ updatePage, currentSession }) {
     usersList === 'error'
       ? (
         React.createElement('h1', { id: 'users-error-message' }, [
-          'An error occurred while fetching Users from the server. Please try again later.',
+          'Error, please try again later',
           React.createElement('br', null),
           React.createElement('br', null),
           React.createElement('div', { onClick: () => window.location.reload(false) }, 'Return to Welcome Page') ]) )

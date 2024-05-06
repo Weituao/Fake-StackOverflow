@@ -8,184 +8,133 @@ import AnswerQuestionPage from './AnswerQuestionPage';
 import UserPage from './UserPage';
 import UserContainer from './UserContainer';
 
-function MainPage({ currentPage, updatePage, setSearch, currentSearch, currentSession }) {
-  switch (currentPage) {
+export default function MainPage({ currentPage: thertrh, updatePage: rtherfcrtvh, setSearch: rytvexfc, currentSearch: tyhrerfcrtgv, currentSession: wexrcrtvhtjyb }) {
+  switch (thertrh) {
     case 'questions':
       return React.createElement('div', { className: 'main' },
         React.createElement(QuestionsPage, {
-          updatePage: updatePage,
-          currentSearch: currentSearch,
-          currentSession: currentSession
-        })
-      );
+          updatePage: rtherfcrtvh,
+          currentSearch: tyhrerfcrtgv,
+          currentSession: wexrcrtvhtjyb}) );
     default:
-      // Handle default case here if necessary
-      break;
-  }
+      break;}
   
-  switch (currentPage.currentPage) {
+  switch (thertrh.currentPage) {
     case 'questions':
       return React.createElement('div', { className: 'main' },
         React.createElement(QuestionsPage, {
-          updatePage: updatePage,
-          currentSearch: currentSearch,
-          currentSession: currentSession,
-          questions: currentPage.questions,
-          username: currentPage.username,
-          userid: currentPage.userid
-        })
-      );
+          updatePage: rtherfcrtvh,
+          currentSearch: tyhrerfcrtgv,
+          currentSession: wexrcrtvhtjyb,
+          questions: thertrh.questions,
+          username: thertrh.username,
+          userid: thertrh.userid}));
     default:
-      // Handle default case here if necessary
-      break;
-  }
-  
-  switch (currentPage) {
+      break;}
+  switch (thertrh) {
     case 'tags':
       return React.createElement('div', { className: 'main' },
         React.createElement(TagsPage, {
-          updatePage: updatePage,
-          setSearch: setSearch,
-          currentSession: currentSession
-        })
-      );
+          updatePage: rtherfcrtvh,
+          setSearch: rytvexfc,
+          currentSession: wexrcrtvhtjyb}));
     default:
-      // Handle default case here if necessary
-      break;
-  }
+      break; }
   
-  switch (currentPage.currentPage) {
+  switch (thertrh.currentPage) {
     case 'tags':
       return React.createElement('div', { className: 'main' },
         React.createElement(TagsPage, {
-          updatePage: updatePage,
-          setSearch: setSearch,
-          currentSearch: currentSearch,
-          currentSession: currentSession,
-          userTags: currentPage.tags,
-          username: currentPage.username,
-          userid: currentPage.userid
+          updatePage: rtherfcrtvh,
+          setSearch: rytvexfc,
+          currentSearch: tyhrerfcrtgv,
+          currentSession: wexrcrtvhtjyb,
+          userTags: thertrh.tags,
+          username: thertrh.username,
+          userid: thertrh.userid
         })
       );
     default:
-      // Handle default case here if necessary
-      break;
-  }
+      break;}
   
-  switch (currentPage) {
+  switch (thertrh) {
     case 'user':
       return React.createElement('div', { className: 'main' },
-        React.createElement(UserPage, { updatePage: updatePage, currentSession: currentSession })
-      );
+        React.createElement(UserPage, { updatePage: rtherfcrtvh, currentSession: wexrcrtvhtjyb }));
     default:
-      // Handle default case here if necessary
-      break;
-  }
-  
+      break;}
 
-  switch (currentPage.currentPage) {
+  switch (thertrh.currentPage) {
     case 'admin-user':
       return React.createElement('div', { className: 'main' },
-        React.createElement(UserContainer, { userid: currentPage.userid, updatePage: updatePage })
-      );
+        React.createElement(UserContainer, { userid: thertrh.userid, updatePage: rtherfcrtvh })  );
     default:
-      // Handle default case here if necessary
-      break;
-  }
+      break;}
   
-
-  switch (currentPage) {
+  switch (thertrh) {
     case 'ask-question':
       return React.createElement('div', { className: 'main' },
-        React.createElement(AskQuestionPage, { updatePage: updatePage, currentSession: currentSession })
-      );
+        React.createElement(AskQuestionPage, { updatePage: rtherfcrtvh, currentSession: wexrcrtvhtjyb }));
     default:
-      // Handle default case here if necessary
-      break;
-  }
+      break;}
   
-  switch (currentPage.currentPage) {
+  switch (thertrh.currentPage) {
     case 'ask-question':
       return React.createElement('div', { className: 'main' },
         React.createElement(AskQuestionPage, {
-          updatePage: updatePage,
-          currentSession: currentSession,
-          editInfo: currentPage.questionEdit
-        })
-      );
+          updatePage: rtherfcrtvh,
+          currentSession: wexrcrtvhtjyb,
+          editInfo: thertrh.questionEdit}));
     default:
-      // Handle default case here if necessary
-      break;
-  }
+      break;}
   
-  switch (currentPage.currentPage) {
+  switch (thertrh.currentPage) {
     case 'question-answer':
       return React.createElement('div', { className: 'main' },
         React.createElement(QuestionAnswerPage, {
-          updatePage: updatePage,
-          qid: currentPage.qid,
-          currentSession: currentSession
-        })
-      );
+          updatePage: rtherfcrtvh,
+          qid: thertrh.qid,
+          currentSession: wexrcrtvhtjyb }) );
     default:
-      // Handle default case here if necessary
-      break;
-  }
+      break;}
   
-  switch (currentPage.currentPage) {
+  switch (thertrh.currentPage) {
     case 'question-answer-user':
       return React.createElement('div', { className: 'main' },
         React.createElement(QuestionAnswerPage, {
-          updatePage: updatePage,
-          qid: currentPage.qid,
-          currentSession: currentSession,
-          username: currentPage.username,
-          userid: currentPage.userid
+          updatePage: rtherfcrtvh,
+          qid: thertrh.qid,
+          currentSession: wexrcrtvhtjyb,
+          username: thertrh.username,
+          userid: thertrh.userid
         })
       );
     default:
-      // Handle default case here if necessary
-      break;
-  }
+      break; }
   
-  switch (currentPage.currentPage) {
+  switch (thertrh.currentPage) {
     case 'reply-to-question':
       return React.createElement('div', { className: 'main' },
-        React.createElement(AnswerQuestionPage, { updatePage: updatePage, qid: currentPage.qid })
-      );
+        React.createElement(AnswerQuestionPage, { updatePage: rtherfcrtvh, qid: thertrh.qid }) );
     default:
-      // Handle default case here if necessary
-      break;
-  }
+      break; }
   
-  switch (currentPage.currentPage) {
+  switch (thertrh.currentPage) {
     case 'reply-to-question-user':
       return React.createElement('div', { className: 'main' },
         React.createElement(AnswerQuestionPage, {
-          updatePage: updatePage,
-          qid: currentPage.qid,
-          username: currentPage.username,
-          userid: currentPage.userid,
-          aid: currentPage.aid,
-          text: currentPage.text
-        })
-      );
+          updatePage: rtherfcrtvh,
+          qid: thertrh.qid,
+          username: thertrh.username,
+          userid: thertrh.userid,
+          aid: thertrh.aid,
+          text: thertrh.text }) );
     default:
-      // Handle default case here if necessary
-      break;
-  }
-  
+      break;}
 
-  switch (currentPage.currentPage) {
+  switch (thertrh.currentPage) {
     case 'loading':
       return React.createElement('div', { className: 'main' }, 'Loading');
     default:
-      // Handle default case here if necessary
-      break;
-  }
-  
-
-  return React.createElement('div', null, '404');
-}
-
-export default MainPage;
+      break;  }
+  return React.createElement('div', null, '404');}

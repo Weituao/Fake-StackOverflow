@@ -3,54 +3,40 @@ import '../stylesheets/AnswerQuestionPage.css';
 import validateHyperLinks from './validateHyperLinks';
 import axios from 'axios';
 
-function AnswerQuestionPage({ updatePage, qid, username, userid, aid, text }) {
+export default function AnswerQuestionPage({ updatePage, qid, username, userid, aid, text }) {
   useEffect(function () {
-    window.scrollTo(0, 0);
-  }, []);
-  
+    window.scrollTo(0, 0);}, []);
   const [hasError, setHasError] = useState(null);
   const [answer, setAnswer] = useState('');
 
-  function setAnswerContent(e) {
-    setAnswer(e.target.value.trim());
-  }
+  function getan(e) {
+    setAnswer(e.target.value.trim()); }
 
-  function validateAnswer(qid) {
+  function isan(qid) {
     const newStateHasError =
       answer.length === 0
-        ? '*Answer field cannot be empty'
+        ? 'Answer cannot be empty'
         : validateHyperLinks(answer)
-        ? '*Constraints violated. The target of a hyperlink, that is, the stuff within () cannot be empty and must begin with “https://” or “http://”.'
+        ? 'Hyperlink cannot be empty and must start with http:// or https://'
         : null;
-  
     setHasError(newStateHasError);
-  
     if (!newStateHasError) {
       const newAnswer = {
         qid: qid,
         text: `${answer}`,
-        ans_by: userid,
-      };
-  
+        ans_by: userid,  };
       const requestUrl = username
         ? `http://localhost:8000/posts/answers/editAnswer/${aid}`
         : 'http://localhost:8000/posts/answers/answerQuestion';
-  
       const requestPromise = username
         ? axios.put(requestUrl, newAnswer)
         : axios.post(requestUrl, newAnswer);
-  
       requestPromise.then(() => {
         updatePage({
           currentPage: username ? 'question-answer-user' : 'question-answer',
           qid: qid,
           username: username,
-          userid: userid,
-        });
-      });
-    }
-  }
-  
+          userid: userid,});});}}
 
   return React.createElement(
     'div',
@@ -59,7 +45,7 @@ function AnswerQuestionPage({ updatePage, qid, username, userid, aid, text }) {
     React.createElement('label', { htmlFor: 'content' }, 'Write answer here'),
     React.createElement('textarea', {
       onChange: function (e) {
-        setAnswerContent(e);
+        getan(e);
       },
       id: 'ans-new-content',
       name: 'content',
@@ -74,10 +60,4 @@ function AnswerQuestionPage({ updatePage, qid, username, userid, aid, text }) {
       id: qid,
       value: 'Post Answer',
       onClick: function () {
-        validateAnswer(qid);
-      }
-    }),
-  );
-}
-
-export default AnswerQuestionPage;
+        isan(qid);}}),);}

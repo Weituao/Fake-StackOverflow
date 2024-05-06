@@ -3,22 +3,12 @@ import '../stylesheets/AskQuestionPage.css';
 import validateHyperLinks from './validateHyperLinks';
 import axios from 'axios';
 
-function AskQuestionPage({ updatePage, currentSession, editInfo }) {
+export default function AskQuestionPage({ updatePage, currentSession, editInfo }) {
   const [hasError, setHasError] = useState({
-    title: false,
-    summary: null,
-    content: null,
-    tags: null,
-    userId: false,
-  });
+    title: false, summary: null, content: null,   tags: null,  userId: false,});
 
   const [question, setQuestion] = useState({
-    title: '',
-    summary: '',
-    content: '',
-    tags: '',
-    userId: currentSession.userId,
-  });
+    title: '',summary: '', content: '',tags: '', userId: currentSession.userId,});
 
   useEffect(() => {
     switch (editInfo) {
@@ -28,101 +18,82 @@ function AskQuestionPage({ updatePage, currentSession, editInfo }) {
           summary: editInfo.summary,
           content: editInfo.text,
           tags: editInfo.tags,
-          userId: currentSession.userId,
-        });
+          userId: currentSession.userId, });
         break;
       default:
-        // Do nothing or handle other cases if necessary
-        break;
-    }
-  }, [editInfo, currentSession]);
-  
+        break;} }, [editInfo, currentSession]);
 
-  function setQuestionTitle(e) {
-    setQuestion(Object.assign({}, question, { title: e.target.value.trim() }));
-  }
+  function ujyhg(e) {
+    setQuestion(Object.assign({}, question, { title: e.target.value.trim() }));}
 
-  function setQuestionContent(e) {
-    setQuestion(Object.assign({}, question, { content: e.target.value.trim() }));
-  }
+  function erthfg(e) {
+    setQuestion(Object.assign({}, question, { content: e.target.value.trim() }));}
 
-  function setQuestionTags(e) {
-    setQuestion(Object.assign({}, question, { tags: e.target.value.trim() }));
-  }
+  function wergf(e) {
+    setQuestion(Object.assign({}, question, { tags: e.target.value.trim() }));}
 
-  function setQuestionSummary(e) {
+  function iuy(e) {
     setQuestion(Object.assign({}, question, { summary: e.target.value.trim() }));
   }
 
-  function validateQuestion() {
-    let newStateHasError = { title: false, summary: null, content: null, tags: null, userId: false };
+  function notgoodq() {
+    let tyjewftrh = { title: false, summary: null, content: null, tags: null, userId: false };
     let tags = question.tags.toLowerCase().split(' ');
     tags = tags.filter((tag) => tag.trim() !== '');
     switch (true) {
       case tags.length === 0:
-        newStateHasError = Object.assign({}, newStateHasError, { tags: '*Must have at least one tag' });
+        tyjewftrh = Object.assign({}, tyjewftrh, { tags: 'Must have at least one tag' });
         break;
-      // Add more cases if needed
       default:
-        // Default case
-        break;
-    }
+        break; }
     
     switch (true) {
       case tags.length === 0:
-        newStateHasError = Object.assign({}, newStateHasError, { tags: '*Must have at least one tag' });
+        tyjewftrh = Object.assign({}, tyjewftrh, { tags: 'Must have at least one tag' });
         break;
       case tags.length > 5:
-        newStateHasError = Object.assign({}, newStateHasError, { tags: '*Cannot have more than 5 tags' });
+        tyjewftrh = Object.assign({}, tyjewftrh, { tags: 'Cannot have more than 5 tags' });
         break;
       case tags.some(tag => tag.length > 20):
-        newStateHasError = Object.assign({}, newStateHasError, { tags: '*Tags cannot have more than 20 characters' });
+        tyjewftrh = Object.assign({}, tyjewftrh, { tags: 'Tags cannot have more than 20 characters' });
         break;
       default:
-        // No errors found
-        break;
-    }
+        break;}
     
     axios.get(`http://localhost:8000/posts/tags`, {}).then(function checkTagCreation(res) {
-      let currentTagsList = res.data.map((tag) => tag.name);
-      const noNewTags = tags.every((val) => currentTagsList.includes(val));
+      let rtyh = res.data.map((tag) => tag.name);
+      const noNewTags = tags.every((val) => rtyh.includes(val));
       switch (true) {
         case currentSession.reputation < 50 && !noNewTags:
-          newStateHasError = Object.assign({}, newStateHasError, {
-            tags: '*User must have atleast 50 reputation points to create a new tag.',
-          });
-          setHasError(newStateHasError);
+          tyjewftrh = Object.assign({}, tyjewftrh, {
+            tags: 'User must have 50 reputation or more to add new tag', });
+          setHasError(tyjewftrh);
           break;
         default:
-          // No errors found
-          break;
-      }
-      
-    });
+          break; }});
 
     switch (true) {
       case question.title === '':
-        newStateHasError = Object.assign({}, newStateHasError, { title: true });
+        tyjewftrh = Object.assign({}, tyjewftrh, { title: true });
         break;
       case question.summary === '':
-        newStateHasError = Object.assign({}, newStateHasError, { summary: '*Summary cannot be empty' });
+        tyjewftrh = Object.assign({}, tyjewftrh, { summary: 'Summary cannot be empty' });
         break;
       case question.summary.length > 140:
-        newStateHasError = Object.assign({}, newStateHasError, { summary: '*Summary cannot have more than 140 characters' });
+        tyjewftrh = Object.assign({}, tyjewftrh, { summary: 'Summary cannot have more than 140 characters' });
         break;
       case question.content === '':
-        newStateHasError = Object.assign({}, newStateHasError, { content: '*Description cannot be empty' });
+        tyjewftrh = Object.assign({}, tyjewftrh, { content: 'Description cannot be empty' });
         break;
       default:
-        let foundError = validateHyperLinks(question.content);
-        switch (foundError) {
+        let fgh = validateHyperLinks(question.content);
+        switch (fgh) {
           case true:
-            newStateHasError = Object.assign({}, newStateHasError, {
-              content: '*Hyperlink cannot be empty and must start with http:// or https://',
+            tyjewftrh = Object.assign({}, tyjewftrh, {
+              content: 'Hyperlink cannot be empty and must start with http:// or https://',
             });
             break;
           default:
-            // No error found, do nothing
             break;
         }
         break;
@@ -131,36 +102,30 @@ function AskQuestionPage({ updatePage, currentSession, editInfo }) {
 
     switch (question.userId === '') {
       case true:
-        newStateHasError = Object.assign({}, newStateHasError, { userId: true });
+        tyjewftrh = Object.assign({}, tyjewftrh, { userId: true });
         break;
       default:
-        // userId is not empty, do nothing
-        break;
-    }
+        break;}
     
 
-    setHasError(newStateHasError);
+    setHasError(tyjewftrh);
     switch (true) {
-      case !newStateHasError.title &&
-        newStateHasError.summary === null &&
-        newStateHasError.content === null &&
-        newStateHasError.tags === null &&
-        !newStateHasError.userId:
+      case !tyjewftrh.title &&
+        tyjewftrh.summary === null &&
+        tyjewftrh.content === null &&
+        tyjewftrh.tags === null &&
+        !tyjewftrh.userId:
         const newQuestion = {
           title: question.title,
           summary: question.summary,
           text: question.content,
           tagNames: tags,
-          askedBy: currentSession.userId,
-        };
-    
+          askedBy: currentSession.userId,};
         if (!editInfo) {
           axios
             .post('http://localhost:8000/posts/questions/askQuestion', newQuestion, {
               headers: {
-                'Content-Type': 'application/json',
-              },
-            })
+                'Content-Type': 'application/json', }, })
             .then(function handlePostQuestionResponse(res) {
               switch (true) {
                 case res.data.error:
@@ -169,27 +134,19 @@ function AskQuestionPage({ updatePage, currentSession, editInfo }) {
                     summary: null,
                     content: null,
                     tags: null,
-                    userId: false,
-                  };
+                    userId: false,   };
                   newErrorState = Object.assign({}, newErrorState, {
-                    tags: '*User must have atleast 50 reputation points to create a new tag.',
-                  });
+                    tags: '*User must have atleast 50 reputation points to create a new tag', });
                   setHasError(newErrorState);
                   break;
                 default:
                   updatePage('questions');
-                  break;
-              }
-            });
-        }
-    
+                  break; } });  }
         if (editInfo) {
           axios
             .put(`http://localhost:8000/posts/questions/editQuestion/${editInfo._id}`, newQuestion, {
               headers: {
-                'Content-Type': 'application/json',
-              },
-            })
+                'Content-Type': 'application/json', }, })
             .then(function handleEditQuestionResponse(res) {
               switch (true) {
                 case res.data.error:
@@ -198,25 +155,17 @@ function AskQuestionPage({ updatePage, currentSession, editInfo }) {
                     summary: null,
                     content: null,
                     tags: null,
-                    userId: false,
-                  };
+                    userId: false, };
                   newErrorState = Object.assign({}, newErrorState, {
-                    tags: '*User must have at least 50 reputation points to create a new tag.',
-                  });
+                    tags: '*User must have at least 50 reputation points to create a new tag.', });
                   setHasError(newErrorState);
                   break;
                 default:
                   updatePage('questions');
-                  break;
-              }
-            });
-        }
+                  break;  }}); }
         break;
       default:
-        break;
-    }
-    
-  }
+        break; } }
 
   return React.createElement(
     'div',
@@ -224,74 +173,63 @@ function AskQuestionPage({ updatePage, currentSession, editInfo }) {
     React.createElement('h2', null, 'Question Title*'),
     React.createElement('label', { htmlFor: 'title' }, 'Limit title to 50 characters or less'),
     React.createElement('input', {
-      onChange: setQuestionTitle,
+      onChange: ujyhg,
       type: 'text',
       className: 'new-q-input',
       id: 'new-title',
       name: 'title',
       maxLength: '50',
-      defaultValue: editInfo ? editInfo.title : '',
-    }),
+      defaultValue: editInfo ? editInfo.title : '', }),
     React.createElement('br'),
     React.createElement('br'),
     React.createElement('label', { htmlFor: 'title', className: 'new-q-error', id: 'title-error' }, hasError.title ? '*Title cannot be empty' : ''),
     React.createElement('h2', null, 'Question Summary*'),
     React.createElement('label', { htmlFor: 'summary' }, 'Limit summary to 140 characters or less'),
     React.createElement('input', {
-      onChange: setQuestionSummary,
+      onChange: iuy,
       type: 'text',
       className: 'new-q-input',
       id: 'new-summary',
       name: 'summary',
       maxLength: '140',
-      defaultValue: editInfo ? editInfo.summary : '',
-    }),
+      defaultValue: editInfo ? editInfo.summary : '', }),
     React.createElement('br'),
     React.createElement('br'),
     React.createElement(
       'label',
       { htmlFor: 'title', className: 'new-q-error', id: 'summary-error' },
-      hasError.summary === null ? '' : hasError.summary
-    ),
+      hasError.summary === null ? '' : hasError.summary  ),
     React.createElement('h2', null, 'Question Text*'),
     React.createElement('label', { htmlFor: 'content' }, 'Add details'),
     React.createElement('textarea', {
-      onChange: setQuestionContent,
+      onChange: erthfg,
       id: 'new-content',
       name: 'content',
-      defaultValue: editInfo ? editInfo.text : '',
-    }),
+      defaultValue: editInfo ? editInfo.text : '',}),
     React.createElement('br'),
     React.createElement('br'),
     React.createElement(
       'label',
       { htmlFor: 'title', className: 'new-q-error', id: 'content-error' },
-      hasError.content === null ? '' : hasError.content
-    ),
+      hasError.content === null ? '' : hasError.content ),
     React.createElement('h2', null, 'Tags*'),
     React.createElement('label', { htmlFor: 'tags' }, 'Add keywords separated by whitespace'),
     React.createElement('input', {
-      onChange: setQuestionTags,
+      onChange: wergf,
       type: 'text',
       className: 'new-q-input',
       id: 'new-tags',
       name: 'tags',
-      defaultValue: editInfo ? editInfo.tags : '',
-    }),
+      defaultValue: editInfo ? editInfo.tags : '', }),
     React.createElement('br'),
     React.createElement('br'),
     React.createElement(
       'label',
       { htmlFor: 'title', className: 'new-q-error', id: 'tags-error' },
-      hasError.tags === null ? '' : hasError.tags
-    ),
+      hasError.tags === null ? '' : hasError.tags),
     React.createElement('input', {
       type: 'submit',
       className: 'submit-question',
       value: 'Post Question',
-      onClick: validateQuestion,
-    }),
-  );
-}
+      onClick: notgoodq,}),);}
 
-export default AskQuestionPage;

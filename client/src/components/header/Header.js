@@ -2,8 +2,8 @@ import React, { useEffect } from 'react';
 import axios from 'axios';
 import '../../stylesheets/Header.css';
 
-function Header({ setSearch, updatePage, updateSession, currentSession, welcomePage }) {
-  function searchQuestion(e) {
+export default function Header({ setSearch, updatePage, updateSession, currentSession, welcomePage }) {
+  function jyerg(e) {
     switch (e.key) {
       case 'Enter':
         setSearch({ tagSearch: false, search: e.target.value });
@@ -11,32 +11,22 @@ function Header({ setSearch, updatePage, updateSession, currentSession, welcomeP
         e.target.value = '';
         break;
       default:
-        // Handle other key events if necessary
-        break;
-    }
-  }
+        break;  } }
   
-
-  function headerButtonClicked() {
-    const handleLogout = () => {
+  function yhdfg() {
+    const fgerghreg = () => {
       updateSession({ loggedIn: false, username: '', email: '' });
-      welcomePage('login');
-    };
-  
-    const handleLogin = () => {
-      alert('Error logging out');
-    };
-  
+      welcomePage('login'); };
+    const hfgd = () => {
+      alert('Error logging out'); };
     currentSession.loggedIn
       ? axios
           .post('http://localhost:8000/users/logout')
           .then(() => {
             updateSession({ loggedIn: false, username: '', email: '' });
-            welcomePage('welcome');
-          })
-          .catch(handleLogin)
-      : handleLogout();
-  }
+            welcomePage('welcome');   })
+          .catch(hfgd)
+      : fgerghreg(); }
 
   useEffect(() => {
     const updateSessionData = (res) => updateSession(res.data);
@@ -48,11 +38,10 @@ function Header({ setSearch, updatePage, updateSession, currentSession, welcomeP
       .catch(handleSessionError);
   }, [updateSession]);
   
-
   return (
     React.createElement('div', { id: 'header', className: 'header' }, [
       React.createElement('div', { id: 'header-button-div' }, [
-        React.createElement('button', { onClick: headerButtonClicked, style: { width: '140%', height: '140%' } }, currentSession.loggedIn ? 'Log Out' : 'Log In'),
+        React.createElement('button', { onClick: yhdfg, style: { width: '140%', height: '140%' } }, currentSession.loggedIn ? 'Log Out' : 'Log In'),
       ]),
       React.createElement('div', { id: 'header-title-div' }, [
         React.createElement('span', {
@@ -62,7 +51,7 @@ function Header({ setSearch, updatePage, updateSession, currentSession, welcomeP
       React.createElement('div', { id: 'header-search-div' }, [
         React.createElement('input', {
           id: 'header-search',
-          onKeyUp: searchQuestion,
+          onKeyUp: jyerg,
           type: 'text',
           name: 'search',
           placeholder: 'Search...'
@@ -72,5 +61,3 @@ function Header({ setSearch, updatePage, updateSession, currentSession, welcomeP
     
   );
 }
-
-export default Header;

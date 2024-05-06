@@ -6,37 +6,28 @@ import parseContent from './parseContent';
 import generateDate from './generateDate';
 import axios from 'axios';
 
-function QuestionAnswerPage({ updatePage, qid, currentSession, username, userid }) {
+export default function QuestionAnswerPage({ updatePage: weffw, qid: twef, currentSession: wexrercg, username: ewcrhtg, userid: ercwrtgv }) {
   useEffect(function() {
-    window.scrollTo(0, 0);
-  }, []);
-
+    window.scrollTo(0, 0);}, []);
   const [question, setQuestion] = useState({});
 
   useEffect(function() {
     axios
-      .get(`http://localhost:8000/posts/questions/${qid}`)
+      .get(`http://localhost:8000/posts/questions/${twef}`)
       .then(async function(res) {
-        const question = res.data;
-        const username = await axios.get(`http://localhost:8000/users/getUsername/${question.asked_by}`);
-        question.username = username.data;
-        setQuestion(question);
-      })
+        const qa = res.data;
+        const us = await axios.get(`http://localhost:8000/users/getUsername/${qa.asked_by}`);
+        qa.username = us.data;
+        setQuestion(qa);})
       .catch(function() {
-        alert('Error getting question');
-      });
-  }, [qid, updatePage]);
+        alert('Error getting question'); });}, [twef, weffw]);
 
-  function ansButtonSownIfLogin() {
-    return currentSession.loggedIn ? (
+  function tyjerf() {
+    return wexrercg.loggedIn ? (
       React.createElement('button', {
         className: 'ans-main-answer',
         onClick: function() {
-          updatePage({ currentPage: 'reply-to-question', qid: question._id });
-        }
-      }, 'Answer Question')
-    ) : React.createElement(React.Fragment, null);
-  }
+          weffw({ currentPage: 'reply-to-question', qid: question._id });}}, 'Answer Question')) : React.createElement(React.Fragment, null);}
 
   return (
     React.createElement('div', null,
@@ -49,27 +40,15 @@ function QuestionAnswerPage({ updatePage, qid, currentSession, username, userid 
               React.createElement('h3', { id: 'top-upper-main-numViews' }, `${question.views} views`),
               React.createElement('p', { id: 'top-upper-main-questionContent' }, parseContent(question.text)),
               React.createElement('div', { id: 'question-content-div-bottom', style: { marginTop: '10%' } },
-              React.createElement(GenerateHtmlForTags, { tagIds: question.tags, qid: question._id })
-              ),
+              React.createElement(GenerateHtmlForTags, { tagIds: question.tags, qid: question._id })),
               React.createElement('div', { className: 'top-upper-main-QAskedBy' },
                 React.createElement('h4', { id: question.asked_by }, `${question.username} `),
-                React.createElement('h5', null, `asked ${generateDate(question.ask_date_time, new Date())}`)
-              )
-            )
-          )
-        ),
+                React.createElement('h5', null, `asked ${generateDate(question.ask_date_time, new Date())}`) ) ))),
       React.createElement('div', { id: 'lower-main-Answers' },
         React.createElement(AnswerContainers, {
-          question_id: qid,
-          updatePage: updatePage,
-          userSession: currentSession,
-          username: username,
-          userid: userid
-        }),
-        React.createElement('div', { className: 'answer-container-last' }, ansButtonSownIfLogin())
-      )
-    )
-  );
-}
-
-export default QuestionAnswerPage;
+          question_id: twef,
+          updatePage: weffw,
+          userSession: wexrercg,
+          username: ewcrhtg,
+          userid: ercwrtgv}),
+        React.createElement('div', { className: 'answer-container-last' }, tyjerf()))));}
