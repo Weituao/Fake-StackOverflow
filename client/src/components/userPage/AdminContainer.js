@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import '../../stylesheets/UsersPage.css';
+import '../../stylesheets/App.css';
 import axios from 'axios';
 
 export default function AdminContainer({ updatePage, currentSession }) {

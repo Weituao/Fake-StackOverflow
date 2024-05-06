@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import '../stylesheets/AskQuestionPage.css';
+import '../stylesheets/App.css';
 import validateHyperLinks from './validateHyperLinks';
 import axios from 'axios';
 
@@ -182,7 +182,7 @@ export default function AskQuestionPage({ updatePage, currentSession, editInfo }
       defaultValue: editInfo ? editInfo.title : '', }),
     React.createElement('br'),
     React.createElement('br'),
-    React.createElement('label', { htmlFor: 'title', className: 'new-q-error', id: 'title-error' }, hasError.title ? '*Title cannot be empty' : ''),
+    React.createElement('label', { htmlFor: 'title', className: 'new-q-error', id: 'title-error' }, hasError.title ? 'Title cannot be empty' : ''),
     React.createElement('h2', null, 'Question Summary*'),
     React.createElement('label', { htmlFor: 'summary' }, 'Limit summary to 140 characters or less'),
     React.createElement('input', {

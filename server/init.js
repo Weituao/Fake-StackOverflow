@@ -23,28 +23,32 @@ function userCreate(username, email, password, isAdmin, created_at, reputation) 
   return user.save();
 }
 
-
 const populate = async () => {
   const hashedPassword_admin = await bcrypt.hash(userArgs[1], 10);
   let admin_user = await userCreate(`Admin`, userArgs[0], hashedPassword_admin, true, new Date(), 1000);
   admin_user.save();
-
   const users = [];
-  const reputations = [0, 40, 70];
-  for (let i = 1; i <= 3; i++) {
+  const reputations = [50];
+  let i = 1;
+  while (i <= 1) {
     const username = `user${i}`;
     const email = `user${i}@gmail.com`;
-    const password = 'abc123';
+    const password = 'test';
     const hashedPassword = await bcrypt.hash(password, 10);
     const isAdmin = false;
     const created_at = new Date();
     const reputation = reputations[i - 1];
-    let user = await userCreate(username, email, hashedPassword, isAdmin, created_at, reputation);
-    users.push(user);
-  }
-
+    switch (true) {
+      case !!db:
+        let user = await userCreate(username, email, hashedPassword, isAdmin, created_at, reputation);
+        users.push(user);
+        break;
+      default:
+        console.log('Database connection is not established.');
+        return;}
+    i++; }
   if (db) db.close();
-  console.log('done');
-};
+  console.log('done');};
+
 populate()
 console.log('processing ...');

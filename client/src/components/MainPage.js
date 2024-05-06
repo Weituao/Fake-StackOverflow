@@ -1,5 +1,5 @@
 import React from 'react';
-import '../stylesheets/MainPage.css';
+import '../stylesheets/App.css';
 import QuestionsPage from './QuestionsPage';
 import TagsPage from './TagsPage';
 import AskQuestionPage from './AskQuestionPage';

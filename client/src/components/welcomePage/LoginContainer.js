@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import '../../stylesheets/SignUpANDLogInContainer.css'
+import '../../stylesheets/App.css'
 import axios from 'axios';
 
 export default function LogInContainer({updatePage}) {

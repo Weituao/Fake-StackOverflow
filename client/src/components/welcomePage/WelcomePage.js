@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import '../../stylesheets/WelcomePage.css';
+import '../../stylesheets/App.css';
 import LoginContainer from './LoginContainer.js';
 import SignUpContainer from './SignupContainer.js';
 import getp from '../PageSelector.js';
@@ -46,11 +46,11 @@ export default function WelcomePage() {
         React.createElement('div', { className: 'centered' },
           React.createElement('h1', { className: 'test-h1' }, 'Fake Stackoverflow'),
           React.createElement('div', { className: 'wp-button-container', style: { display: 'flex', flexDirection: 'column' } },
-          React.createElement('button', { disabled: isac.loggedIn, onClick: () => getthisp('signup'), style: { height: '120%', width: '120%' } },
+          React.createElement('button', { disabled: isac.loggedIn, onClick: () => getthisp('signup'), style: { height: '120%', width: '90%' } },
             'Sign Up'),
-          React.createElement('button', { disabled: isac.loggedIn, onClick: () => getthisp('login'), style: { height: '120%', width: '120%' } },
+          React.createElement('button', { disabled: isac.loggedIn, onClick: () => getthisp('login'), style: { height: '120%', width: '90%' } },
             'Log In'),
-          React.createElement('button', { onClick: () => getthisp('guest'), style: { height: '120%', width: '120%' } },
+          React.createElement('button', { onClick: () => getthisp('guest'), style: { height: '120%', width: '90%' } },
             isac.loggedIn ? `Welcome back ${isac.username}` : 'Enter as Guest')) ) ) ));}
 
 

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import '../stylesheets/QuestionAnswerPage.css';
+import '../stylesheets/App.css';
 import GenerateHtmlForTags from './generateHtmlForTags';
 import AnswerContainers from './AnswerContainers';
 import parseContent from './parseContent';

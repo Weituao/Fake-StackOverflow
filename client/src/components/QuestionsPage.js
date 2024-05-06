@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import '../stylesheets/QuestionsPage.css';
+import '../stylesheets/App.css';
 import QuestionContainers from './QuestionContainers';
 import axios from 'axios';
 

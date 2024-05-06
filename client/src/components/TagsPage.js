@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import '../stylesheets/TagsPage.css';
+import '../stylesheets/App.css';
 import TagsWrapper from './tagsPage/TagsWrapper';
 import axios from 'axios';
 

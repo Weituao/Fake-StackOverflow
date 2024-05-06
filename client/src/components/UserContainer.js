@@ -1,5 +1,5 @@
 import axios from 'axios';
-import '../stylesheets/UsersPage.css';
+import '../stylesheets/App.css';
 import generateDate from './generateDate';
 import { getTagById } from './generateHtmlForTags';
 import React, { useState, useEffect } from 'react';

@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import axios from 'axios';
-import '../../stylesheets/Header.css';
+import '../../stylesheets/App.css';
 
 export default function Header({ setSearch, updatePage, updateSession, currentSession, welcomePage }) {
   function jyerg(e) {

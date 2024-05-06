@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import '../stylesheets/AnswerQuestionPage.css';
+import '../stylesheets/App.css';
 import validateHyperLinks from './validateHyperLinks';
 import axios from 'axios';
 

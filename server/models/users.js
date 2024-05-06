@@ -6,7 +6,7 @@ let UserSchema = new Schema( {
     password: {type: String, required: true},
     isAdmin: {type: Boolean, default: false},
     created_at: {type: Date, default: new Date},
-    reputation: {type: Number, default: 0}
+    reputation: {type: Number, default: 50}
 });
 UserSchema
 .virtual('url')

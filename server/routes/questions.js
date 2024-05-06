@@ -225,27 +225,45 @@ router.post('/askQuestion', async (req, res) => {
   const tagNames = Array.isArray(newQuestionInput.tagNames) ? newQuestionInput.tagNames : [];
   const tags = [...new Set(tagNames)];
   const tagIds = [];
-  for (const tag of tags) {
-    const tagExists = await Tags.findOne({ name: tag }).exec();
-    if (tagExists) {
-      tagIds.push(tagExists._id);
-    } else {
-      try {
-        const user = await Users.findOne({ _id: newQuestionInput.askedBy }).exec();
-        if (user.reputation < 50) {
-          res.send({ error: true, message: 'User must have atleast 50 reputation points to create a new tag.' });
-          return;
+
+  switch (true) {
+    case Array.isArray(tags):
+      let i = 0;
+      while (i < tags.length) {
+        const tag = tags[i];
+        const tagExists = await Tags.findOne({ name: tag }).exec();
+        switch (!!tagExists) {
+          case true:
+            tagIds.push(tagExists._id);
+            break;
+          default:
+            try {
+              const user = await Users.findOne({ _id: newQuestionInput.askedBy }).exec();
+              switch (user.reputation >= 50) {
+                case true:
+                  const newTag = new Tags({ name: tag, created_By: newQuestionInput.askedBy });
+                  await newTag.save();
+                  tagIds.push(newTag._id);
+                  break;
+                default:
+                  res.send({ error: true, message: 'User must have atleast 50 reputation points to create a new tag.' });
+                  return;
+              }
+            } catch (error) {
+              console.error(error);
+              res.status(500).send('Error creating tag');
+              return;
+            }
+            break;
         }
-        const newTag = new Tags({ name: tag, created_By: newQuestionInput.askedBy });
-        await newTag.save();
-        tagIds.push(newTag._id);
-      } catch (error) {
-        console.error(error);
-        res.status(500).send('Error creating tag');
-        return;
+        i++;
       }
-    }
+      break;
+    default:
+      res.status(400).send('Invalid tag input');
+      return;
   }
+
   try {
     const newQuestion = new Questions({
       title: newQuestionInput.title,
@@ -261,6 +279,7 @@ router.post('/askQuestion', async (req, res) => {
     res.status(500).send('Error creating question');
   }
 });
+
 
 router .put('/editQuestion/:question', async (req, res) => {
   const tfwerthb = await Questions .findById(req.params.question).exec();

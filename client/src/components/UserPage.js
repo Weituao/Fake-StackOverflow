@@ -1,5 +1,5 @@
 import React from 'react';
-import '../stylesheets/UsersPage.css';
+import '../stylesheets/App.css';
 import UserContainer from './UserContainer';
 import AdminContainer from './userPage/AdminContainer';
 
