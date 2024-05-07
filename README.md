@@ -1,12 +1,10 @@
 ## Instructions to setup and run project
-Install dependencies in Client
+Go the client directory and install dependencies in Client
 ```bash
-$ cd client
 $ npm install
 ```
-Install dependencies in Server
+Go the server directory and install dependencies in server
 ```bash
-$ cd ../server
 $ npm install
 ```
 Have a background service of MongoDB running, then go to
