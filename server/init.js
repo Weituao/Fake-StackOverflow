@@ -31,8 +31,8 @@ const populate = async () => {
   const reputations = [50];
   let i = 1;
   while (i <= 1) {
-    const username = `user${i}`;
-    const email = `user${i}@gmail.com`;
+    const username = `user`;
+    const email = `user@gmail.com`;
     const password = 'test';
     const hashedPassword = await bcrypt.hash(password, 10);
     const isAdmin = false;

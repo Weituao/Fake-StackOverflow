@@ -4,7 +4,7 @@ const Questions  = require('../models/questions');
 const Answers  = require('../models/answers');
 const Users  = require('../models/users');
 const Comments  = require('../models/comments');
-const auth = require('../middleware/auth');
+const auth = require('./auth');
 
 router.get('/:qid', async function(req, res) {
   const mqfq = await Questions .findById(req.params.qid).exec();

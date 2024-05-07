@@ -61,7 +61,7 @@ router.get('/getUser/:user_id', async (req, res) => {
 });
 
 
-const auth = require('../middleware/auth');
+const auth = require('./auth');
 
 router.put('/modify/:tag_id', auth, async (req, res) => {
   const tag_id = req.params.tag_id;

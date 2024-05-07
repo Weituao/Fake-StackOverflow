@@ -6,7 +6,7 @@ const hgwes = require('../models/questions');
 const geys = require('../models/answers');
 const jbwesd = require('../models/users');
 const hged = require('../models/comments');
-const auth = require('../middleware/auth');
+const auth = require('./auth');
 router.use(auth); 
 
 router.post('/addComment', async (req, res) => {

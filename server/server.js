@@ -7,9 +7,7 @@ app.use(
   cors({
     origin: 'http://localhost:3000',
     methods: ['POST', 'PUT', 'GET', 'DELETE', 'PATCH'],
-    credentials: true,
-  })
-);
+    credentials: true,}));
 
 app.use(express.json());
 const port = 8000;
@@ -35,8 +33,7 @@ process.on('SIGINT', async () => {
       .catch((err) => console.log(err))
     : Promise.resolve()
   );
-  process.exit(0);
-});
+  process.exit(0);});
 const gerg = require('./routes/questions.js');
 const therfw = require('./routes/answers.js');
 const jkjrt = require('./routes/tags.js');
@@ -49,7 +46,6 @@ app.use('/posts/tags', jkjrt);
 app.use('/posts/comments', edthuj);
 app.use('/users/', hjrg);
 app.get('/posts', (req, res) => {
-  res.redirect('/posts/questions');
-});
+  res.redirect('/posts/questions');});
 
 app.listen(port, () => console.log(`listening on port ${port}`));

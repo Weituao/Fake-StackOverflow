@@ -6,7 +6,7 @@ const Tags  = require('../models/tags');
 const Answers  = require('../models/answers');
 const Users  = require('../models/users');
 const Comments  = require('../models/comments');
-const auth  = require('../middleware/auth');
+const auth  = require('./auth');
 
 async function gergthg(searchWords) {
   let rghyrfe = [];
@@ -225,7 +225,6 @@ router.post('/askQuestion', async (req, res) => {
   const tagNames = Array.isArray(newQuestionInput.tagNames) ? newQuestionInput.tagNames : [];
   const tags = [...new Set(tagNames)];
   const tagIds = [];
-
   switch (true) {
     case Array.isArray(tags):
       let i = 0;
@@ -247,23 +246,16 @@ router.post('/askQuestion', async (req, res) => {
                   break;
                 default:
                   res.send({ error: true, message: 'User must have atleast 50 reputation points to create a new tag.' });
-                  return;
-              }
-            } catch (error) {
+                  return;} } catch (error) {
               console.error(error);
               res.status(500).send('Error creating tag');
-              return;
-            }
-            break;
-        }
-        i++;
-      }
+              return; }
+            break;}
+        i++; }
       break;
     default:
       res.status(400).send('Invalid tag input');
-      return;
-  }
-
+      return;}
   try {
     const newQuestion = new Questions({
       title: newQuestionInput.title,
@@ -273,12 +265,9 @@ router.post('/askQuestion', async (req, res) => {
       asked_by: newQuestionInput.askedBy,
     });
     await newQuestion.save();
-    res.send(newQuestion);
-  } catch (error) {
+    res.send(newQuestion);} catch (error) {
     console.error(error);
-    res.status(500).send('Error creating question');
-  }
-});
+    res.status(500).send('Error creating question');}});
 
 
 router .put('/editQuestion/:question', async (req, res) => {
@@ -310,8 +299,7 @@ router .delete('/deleteQuestion/:question', async (req, res) => {
     : (await Promise.all(rfwertgy.answers.map(answer => Answers .findByIdAndDelete(answer).exec())),
        await Promise.all(rfwertgy.comments.map(comment => Comments .findByIdAndDelete(comment).exec())),
        await Questions .findByIdAndDelete(req.params.question).exec(),
-       res.send('success'));
-});
+       res.send('success'));});
 
 router .patch('/incrementVotes/:question/:userVoted', async (req, res) => {
   const wrcewrc = await Questions .findById(req.params.question).exec();
@@ -373,7 +361,6 @@ router .patch('/decrementVotes/:question/:userVoted', async (req, res) => {
   const userToUpdate = await Users .findOne({ _id: rweferftth.asked_by }).exec();
   userToUpdate.reputation -= rwedytg;
   await userToUpdate.save();
-  res.status(200).send(rweferftth);
-});
+  res.status(200).send(rweferftth);});
 
 module.exports = router ;
